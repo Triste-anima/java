@@ -1,0 +1,87 @@
+
+
+public class MyInteger {
+	public int value;
+	
+	public MyInteger(int value){
+		this.value = value;
+	}
+	
+	public int getter(){
+		return value;
+	}
+	
+	public boolean isEven() {
+		if(value % 2 == 0)
+			return true;
+		return false;
+	}
+	
+	public boolean isOdd() {
+		if(value % 2 == 0)
+			return false;
+		return true;
+	}
+	
+	public boolean isPrime() {
+		for(int i = 2; i * i <= value; ++i)
+			if(value % i == 0)
+				return false;
+		return true;
+	}
+	
+	public static boolean isEven(int num) {
+		if(num % 2 == 0)
+			return true;
+		return false;
+	}
+	
+	public static boolean isOdd(int num) {
+		if(num % 2 == 0)
+			return false;
+		return true;
+	}
+	
+	public static boolean isPrime(int num) {
+		for(int i = 2; i * i <= num; ++i)
+			if(num % i == 0)
+				return false;
+		return true;
+	}
+	
+	public static boolean isEven(MyInteger a) {
+		if(a.value % 2 == 0)
+			return true;
+		return false;
+	}
+	
+	public static boolean isOdd(MyInteger a) {
+		if(a.value % 2 == 0)
+			return false;
+		return true;
+	}
+	
+	public static boolean isPrime(MyInteger a) {
+		for(int i = 2; i * i <= a.value; ++i)
+			if(a.value % i == 0)
+				return false;
+		return true;
+	}
+	
+	public boolean equals(int num) {
+		if(num == value)
+			return true;
+		return false;
+	}
+	
+	public boolean equals(MyInteger a) {
+		if(a.value == value)
+			return true;
+		return false;
+	}
+}
+
+
+
+
+
