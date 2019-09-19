@@ -1,0 +1,86 @@
+
+public class Author {
+	public String name;
+	public String email;
+	public char gender;
+	
+	public Author(String name1, String email1, char gender1) {
+		name = name1;
+		email = email1;
+		gender = gender1;
+	}
+	
+	public String getName() {
+		return name;
+	}
+	
+	public String getEmail() {
+		return email;
+	}
+	
+	public void setEmail(String email1) {
+		email = email1;
+	}
+	
+	public char getGender() {
+		return gender;
+	}
+	
+	public String toString() {
+		String ans = "Author[name=" + name + ",email=" + email + ",gender=" + gender + "]";
+		return ans;
+	}
+}
+
+
+
+
+
+public class Book {
+	public String name;
+	Author author;
+	public double price;
+	public int qty = 0;
+	
+	public Book(String name1, Author author1, double price1) {
+		name = name1;
+		author = author1;
+		price = price1;
+	}
+	
+	public Book(String name1, Author author1, double price1, int qty1) {
+		name = name1;
+		author = author1;
+		price = price1;
+		qty = qty1;
+	}
+	
+	public String getName() {
+		return name;
+	}
+	
+	public Author getAuthor() {
+		return author;
+	}
+	
+	public double getPrice() {
+		return price;
+	}
+	
+	public void setPrice(double price1) {
+		price = price1;
+	}
+	
+	public int getQty() {
+		return qty;
+	}
+	
+	public void setQty(int qty1) {
+		qty = qty1;
+	}
+	
+	public String toString() {
+		String ans = "Book[name=" + name + author.toString() + ",price=" + price + ",qty=" + qty + "]";
+		return ans;
+	}
+}
