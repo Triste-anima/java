@@ -1,0 +1,67 @@
+public class StockSeller {
+	public int[] prices;
+	public int ans;
+	
+	public StockSeller(int[] price) {
+		prices = new int[price.length];
+		ans = 0;
+		for(int i = 0; i < price.length; ++i)
+			prices[i] = price[i];
+	}
+	
+	public int MaxProfit1() {
+		ans = 0;
+		for(int i = 0; i < prices.length; ++i)
+			for(int j = i + 1; j < prices.length; ++j)
+				if(prices[i] < prices[j])
+					ans = Math.max(ans, prices[j] - prices[i]);
+	
+		return ans;
+	}
+	
+	public void solve2(int pos, int sold) {
+		if(pos >= prices.length)
+		{
+			ans = Math.max(ans, sold);
+			return;
+		}
+		
+		for(int i = pos + 1; i < prices.length; ++i)
+			if(prices[pos] < prices[i])
+				for(int j = i + 1; j <= prices.length; ++j)
+					this.solve2(j, sold + (prices[i] - prices[pos]));
+		
+		ans = Math.max(ans, sold);
+		return;
+	}
+	
+	public int MaxProfit2() {
+		ans = 0;
+		for(int i = 0; i < prices.length; ++i)
+			this.solve2(i, 0);
+		return ans;
+	}
+	
+	public void solve3(int pos, int sold, int times) {
+		if(pos >= prices.length || times == 2)
+		{
+			ans = Math.max(ans, sold);
+			return;
+		}
+		
+		for(int i = pos + 1; i < prices.length; ++i)
+			if(prices[pos] < prices[i])
+				for(int j = i + 1; j <= prices.length; ++j)
+					this.solve3(j, sold + (prices[i] - prices[pos]), times + 1);
+		
+		ans = Math.max(ans, sold);
+		return;
+	}
+	
+	public int MaxProfit3() {
+		ans = 0;
+		for(int i = 0; i < prices.length; ++i)
+			this.solve3(i, 0, 0);
+		return ans;
+	}
+}
