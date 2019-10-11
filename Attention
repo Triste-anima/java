@@ -1,3 +1,4 @@
+基础篇
 1.参数传递
 (1)基本类型作为参数传递时，是传递值的拷贝，无论你怎么改变这个拷贝，原值是不会改变的
 (2)对象作为参数传递时，是把对象在内存中的地址拷贝了一份传给了参数。
@@ -39,13 +40,14 @@ eg: final int value;		//未初始化
 Heap memory grows downward----static variable, constant, object(按从上到下顺序)
 Stack memory grows upward----local variable
 
+继承篇
 7..java只能单继承(只有一个直接父类)--single inheritance
 
 8..用  super.变量/函数  访问父类成员变量/函数
 
 9.
-static 静态成员变量/函数 访问命名空间(即变量名前面的class)所在变量/函数；
-普通则访问 = 后面的class
+static/private + 静态成员变量/函数 访问命名空间(即变量名前面的class)所在变量/函数；
+普通则访问 = 后面的class  因为是编译时binding
 
 10..父类构造函数的调用必须是子类构造函数的第一行：
 Invocation of a superclass constructor must be the first line in the subclass constructor:
@@ -68,7 +70,49 @@ B temp2 = new A()		//error
 
 14.Object is the root (or top) of any class hierarchy in Java.
 
+多态篇
+15.
+An object of a subtype can be used wherever its supertype value is required.
+This feature is known as polymorphism .
+
+16.
+(1)Non-polymorphic methods (static methods) are “bound" at compile time
+called earl y binding or static binding.
+
+(2)Polymorphic methods are “bound" at run time
+called late binding or dynamic binding (also called dynamic dispatch). 
+
+Java methods are polymorphic by default
+
+static or final (private methods are implicitly final) are bound atcompile time.
+
+17.成员函数(普通调用)匹配时,从最底端的子类开始向上找,直到第一次找到该函数时停止
+
+18.抽象类可以包含/不包含抽象方法,但是抽象方法一定包含在抽象类. 抽象类不能实例化对象,只能作为父类被继承
+
+19.抽象方法被声明时不用限定修饰(private/protected/public), 抽象类被声明时要包含限定修饰
+eg: abstract void moveTo(double deltaX, double deltaY); 
+
+20.子类继承抽象父类时,要实现抽象父类中的所有抽象方法. 否则子类也必须定义为抽象类
+
+接口篇(==方法全为抽象方法的抽象class)
+21.一个接口class 只包含constants(final/static), method signatures(不含方法体), and nested types(嵌套类型)
+
+22.接口class不可实例化
+
+23.接口可以实现多继承 Multiple Inheritance 
+
+24.接口子类必须实现父类里的全部方法,否则子类需定义为抽象类
+
 .继承、多态、接口的使用区别
 (1)继承(Inheritance)--关键字 extends--父类的方法全部适用于子类
-(2)多态(Polymorphism)--关键字--父类的方法有些适用于子类，有些不适用(需要重载)
-(3)接口(Interface)--关键字 --父类的方法全部不适用于子类(需要重载)
+(2)多态(Polymorphism)--关键字 extends--父类的方法有些适用于子类，有些不适用(需要重载)
+(3)接口(Interface)--关键字 implements--父类的方法全部不适用于子类(需要重载)
+接口示例如下:
+public interface BicycleInterface { 
+	void changeCadence(int newValue); 
+	void changeGear(int newValue); 
+	void speedUp(int increment); 
+	void applyBrakes(int decrement);
+}
+
