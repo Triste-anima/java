@@ -1,0 +1,19 @@
+6.java只能单继承(只有一个直接父类)--single inheritance
+
+7.用  super.变量/函数  访问父类成员变量/函数
+
+8.
+static 静态成员变量/函数 访问命名空间(即变量名前面的class)所在变量/函数；
+普通则访问 = 后面的class
+
+9.父类构造函数的调用必须是子类构造函数的第一行：
+Invocation of a superclass constructor must be the first line in the subclass constructor:
+
+
+10.final class/函数 不能被继承/重载
+An entire class can be declared final to prevent the class from being subclassed
+
+.继承、多态、接口的使用区别
+(1)继承(Inheritance)--关键字 extends--父类的方法全部适用于子类
+(2)多态(Polymorphism)--关键字--父类的方法有些适用于子类，有些不适用(需要重载)
+(3)接口(Interface)--关键字 --父类的方法全部不适用于子类(需要重载)
