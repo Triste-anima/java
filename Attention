@@ -1,17 +1,72 @@
-6.java只能单继承(只有一个直接父类)--single inheritance
+1.参数传递
+(1)基本类型作为参数传递时，是传递值的拷贝，无论你怎么改变这个拷贝，原值是不会改变的
+(2)对象作为参数传递时，是把对象在内存中的地址拷贝了一份传给了参数。
+https://www.cnblogs.com/huanghuanghui/p/9386047.html
 
-7.用  super.变量/函数  访问父类成员变量/函数
+2.There are 2 levels of access control:(都是默认为private)
+(1)At the top level - package-private(no explicit modifier stated) or public.
+(2)At the member level - package-private(no explicit modifier stated), public, private, or protected.
 
-8.
+规则如下表格(Y-yes, N-no----详见第三个课件(03)29页)
+Modifier 		Class 		Package 		Subclass 		World
+public 		Y 		Y 		Y 		Y
+protected 	Y		Y		Y		N
+no modifier	Y		Y		N		N
+private 		Y		N		N		N
+
+3.static成员函数内没有this指针
+
+4.用如→格式访问static成员/函数 (class name.static(成员/指针))
+如:
+calss A{
+    private static int a;
+    
+    public int get_a()
+    {
+        return A.a;
+    }
+}
+
+5.常数(constant)用 final 关键字修饰
+eg: final int value = 3;	//初始化
+      value = 5;		//错误,常数一旦初始化,不能修改
+
+eg: final int value;		//未初始化
+      value = 5;		//正确(初始化)
+      value = 10;		//错误,常数一旦初始化,不能修改
+
+6.关于储存见(03课件35~39)
+Heap memory grows downward----static variable, constant, object(按从上到下顺序)
+Stack memory grows upward----local variable
+
+7..java只能单继承(只有一个直接父类)--single inheritance
+
+8..用  super.变量/函数  访问父类成员变量/函数
+
+9.
 static 静态成员变量/函数 访问命名空间(即变量名前面的class)所在变量/函数；
 普通则访问 = 后面的class
 
-9.父类构造函数的调用必须是子类构造函数的第一行：
+10..父类构造函数的调用必须是子类构造函数的第一行：
 Invocation of a superclass constructor must be the first line in the subclass constructor:
 
 
-10.final class/函数 不能被继承/重载
-An entire class can be declared final to prevent the class from being subclassed
+11.final class/函数/变量  不能被继承/重载/修改
+A final class cannot be extended.
+A final method cannot be overridden.
+A final field or variable, once initialized, cannot change its value.
+
+12.只能down casting
+calss A
+calss B extends A
+A temp1 = new B()		//right
+B temp2 = new A()		//error
+
+13.继承Inheritance 和组合Composition 的区别
+继承是 is a 的关系
+组合是 has a 的关系
+
+14.Object is the root (or top) of any class hierarchy in Java.
 
 .继承、多态、接口的使用区别
 (1)继承(Inheritance)--关键字 extends--父类的方法全部适用于子类
