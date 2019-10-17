@@ -116,3 +116,67 @@ public interface BicycleInterface {
 	void applyBrakes(int decrement);
 }
 
+异常(Execptions)处理篇
+25.
+Exception是异常处理类中最高级的父类,自定义其他类型的exception 一定要extends Exception
+
+26.
+The checked exceptions that a method throws are as important as the type of value it returns. Both must be declared. 
+
+27.
+Throws clauses and Method Overriding: An overriding or implementing method is not allowed to declare more checked exceptions in the throws clause than the inherited method does.
+
+28.
+所有的异常都在catch中处理 And the exception will be handled by the code in the catch block.
+
+29.
+(1)Throwable: Error  &  Exception
+(2)Error: System malfunction  &  OutOfMemoryException  &  StackOverflowError
+(3)Exception: Runtimely exception  &  Checked exception
+(4)Checked exception: SQLException  &  IOException  &  FileNotFoundException
+(5)Runtime exception (unchecked exception): ArithmeticException  &  ClassCastException  &  (6)ArrayIndexOutOfBoundsException  &  NullPointerException
+
+30.
+catch从上到下顺序: 最低级子类的exception -> 最高级父类exception
+原因: 若先catch父类exception, 则剩下代码无意义 
+
+31.
+initCause is used to remember the exception that made the data bad. Later , the getCause method is used to retrieve the exception.
+
+32.(ppt07-27 & 28)
+asnwer 27:
+Before a
+Before b
+Before c
+Before d
+d: finally				//finally一定会输出
+c: finally				//有异常抛出时, try函数中异常抛出之后的代码不执行
+b: ArrayIndexOutOfBoundsException  	//在b函数中catch了异常
+b: finally
+After b				//异常已经被处理, 函数正常按顺序运行
+a: finally
+After a
+main: finally
+
+answer 28:
+Before a
+Before b
+Before c
+Before d
+Before division
+d: ArithmeticException
+d: finally
+//此时c函数中d()仍会抛出异常, 不执行After d
+c: ArithmeticException
+c: finally
+b: ArithmeticException
+b: finally
+After b			//a函数中b()已经没有异常抛出, 正常按顺序执行
+a: finally
+After a
+main: finally
+
+33.java异常处理的优点
+(1)异常处理代码和普通代码分开有条理
+(2)有一场不一定要在这个方法中处理,可以向上级返回
+(3)
