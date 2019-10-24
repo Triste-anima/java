@@ -174,7 +174,11 @@ public class Shape {
 	
 	public String toString()
 	{
-		String result = "";
+		String result = "A Shape with color of " + color + " and ";
+		if(filled == true)
+			result += "filled";
+		else
+			result += "NOT filled";
 		return result;
 	}
 }
@@ -226,7 +230,124 @@ public class Circle extends Shape{
 	
 	public String toString()
 	{
-		String result = "";
+		String result = "A Circle with radius = " + radius + ", which is a subclass of " + super.toString();
 		return result;
 	}
 }
+
+
+
+
+
+public class Rectangle extends Shape{
+	public double width;
+	double length;
+	
+	Rectangle()
+	{
+		width = 1.0;
+		length = 1.0;
+	}
+	
+	Rectangle(double w, double l)
+	{
+		width = w;
+		length = l;
+	}
+	
+	Rectangle(double w, double l, String c, boolean f)
+	{
+		width = w;
+		length = l;
+		color = c;
+		filled = f;
+	}
+	
+	public double getWidth()
+	{
+		return width;
+	}
+	
+	public void setWidth(double w)
+	{
+		width = w;
+	}
+	
+	public double getLength()
+	{
+		return length;
+	}
+	
+	public void setLength(double l)
+	{
+		length = l;
+	}
+	
+	public double getArea()
+	{
+		return width * length;
+	}
+	
+	public double getPerimeter()
+	{
+		return 2 * (width + length);
+	}
+	
+	public String toString()
+	{
+		String result = "A Rectangle with width = " + width + " and length = " + length + ", which is a subclass of " + super.toString();
+		return result;
+	}
+}
+
+
+
+
+
+public class Square extends Rectangle{
+	
+	Square()
+	{
+		super();
+	}
+	
+	Square(double side)
+	{
+		super(side, side);
+	}
+	
+	Square(double side, String c, boolean f)
+	{
+		super(side, side, c, f);
+	}
+	
+	public double getSide()
+	{
+		return super.getWidth();
+	}
+	
+	public void setSide(double side)
+	{
+		super.setWidth(side);
+		super.setLength(side);
+	}
+	
+	public void setWidth(double side)
+	{
+		super.setWidth(side);
+		super.setLength(side);
+	}
+	
+	public void setLength(double side)
+	{
+		super.setWidth(side);
+		super.setLength(side);
+	}
+	
+	public String toString()
+	{
+		String result = "A Square with side = " + getSide() + ", which is a subclass of " + super.toString();
+		return result;
+	}
+}
+
