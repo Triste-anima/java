@@ -129,3 +129,104 @@ public class MovableCircle implements Movable { // saved as "MovableCircle.java"
 
 }
 
+
+
+
+
+
+03
+
+public class Shape {
+	public String color;
+	public boolean filled;
+	
+	Shape()
+	{
+		color = "red";
+		filled = true;
+	}
+	
+	Shape(String c, boolean f)
+	{
+		color = c;
+		filled = f;
+	}
+	
+	public String getColor()
+	{
+		return color;
+	}
+	
+	public void setColor(String c)
+	{
+		color = c;
+	}
+	
+	public boolean isFilled()
+	{
+		return filled;
+	}
+	
+	public void setFilled(boolean f)
+	{
+		filled = f;
+	}
+	
+	public String toString()
+	{
+		String result = "";
+		return result;
+	}
+}
+
+
+
+
+
+
+public class Circle extends Shape{
+	public double radius;
+	
+	Circle()
+	{
+		radius = 1.0;
+	}
+	
+	Circle(double r)
+	{
+		radius = r;
+	}
+	
+	Circle(double r, String c, boolean f)
+	{
+		radius = r;
+		color = c;
+		filled = f;
+	}
+	
+	public double getRadius()
+	{
+		return radius;
+	}
+	
+	public void setRadius(double r)
+	{
+		radius = r;
+	}
+	
+	public double getArea()
+	{
+		return Math.PI * radius * radius;
+	}
+	
+	public double getPerimeter()
+	{
+		return Math.PI * radius * 2;
+	}
+	
+	public String toString()
+	{
+		String result = "";
+		return result;
+	}
+}
