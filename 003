@@ -351,3 +351,60 @@ public class Square extends Rectangle{
 	}
 }
 
+
+
+
+
+3.2
+
+public abstract class Shape {
+	protected String color;
+	protected boolean filled;
+	
+	Shape()
+	{
+		color = "red";
+		filled = true;
+	}
+	
+	Shape(String c, boolean f)
+	{
+		color = c;
+		filled = f;
+	}
+	
+	public String getColor()
+	{
+		return color;
+	}
+	
+	public void setColor(String c)
+	{
+		color = c;
+	}
+	
+	public boolean isFilled()
+	{
+		return filled;
+	}
+	
+	public void setFilled(boolean f)
+	{
+		filled = f;
+	}
+	
+	public String toString()
+	{
+		String result = "A Shape with color of " + color + " and ";
+		if(filled == true)
+			result += "filled";
+		else
+			result += "NOT filled";
+		return result;
+	}
+	
+	public abstract double getArea();
+	public abstract double getPerimeter();
+
+}
+
