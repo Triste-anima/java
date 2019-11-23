@@ -1,0 +1,213 @@
+01
+public class Window extends Thread{
+	private static int num = 0;
+	static Object ob = "aa";//值是任意的
+	public Window [] windows = new Window[3];
+	
+	public Window(String name) {
+		super(name);
+	}
+	
+	public Window() {
+		windows[0] = new Window("1");
+		windows[1] = new Window("2");
+		windows[2] = new Window("3");
+	}
+	
+	
+
+	public void window() {
+		while(num <= 20) {
+			int i = (int)(Math.random() * 3);
+			synchronized(ob) {
+				num++;
+				if(num <= 20) 
+					System.out.println("Window " + windows[i].getName() + ": ticket " + num);
+				else
+					System.out.println("Sold Out");
+			}
+			try {
+				sleep(1);//休息一秒
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+}
+
+
+
+
+
+02
+public class Bank implements Runnable{
+	private static final Object SYNCHRONIZED_OBJECT = new Object();
+	private class Account implements Runnable{
+		public int balance;
+		public String name;
+		
+		public Account(int b, String n) {
+			balance = b;
+			name = n;
+		}
+		
+		public String getName() {
+			return name;
+		}
+		
+		public int getBalance() {
+			return balance;
+		}
+		
+		public void trans(Account other) {
+			synchronized(SYNCHRONIZED_OBJECT) {
+				this.balance -= 100;
+				other.balance += 100;
+				System.out.println("account " + this.name + " transfer $100 to account " + other.getName() + ", balance of account " + other.getName() + ": $" + other.getBalance());
+			}
+		}
+
+		public void run() {
+			try {
+				Thread.sleep(1);
+				this.trans(accounts[0]);
+			}catch(InterruptedException e) {
+				return;
+			}
+		}
+	};
+	private Account [] accounts = new Account[3];
+	
+	public Bank() {
+		accounts[0] = new Account(100, "A");
+		accounts[1] = new Account(10000, "B");
+		accounts[2] = new Account(10000, "C");
+	}
+	
+	public void bank() {
+		System.out.println("balance of account " + accounts[0].getName() + ": $" + accounts[0].getBalance());
+		int borigin = accounts[1].getBalance();
+		int corigin = accounts[2].getBalance();
+		Thread temp = new Thread(this);
+		temp.start();
+		try {
+			temp.join();
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+
+		System.out.println("account B transfer $" + (borigin - accounts[1].getBalance()) + " to account A in total");
+		System.out.println("account C transfer $" + (corigin - accounts[2].getBalance()) + " to account A in total");
+		System.out.println("balance of account " + accounts[0].getName() + ": $" + accounts[0].getBalance());
+	}
+
+	public void run() {
+		try {
+			for(int i = 0; i < 10; ++i) {
+				Thread.sleep(1);
+				accounts[1].run();
+				accounts[2].run();
+			}
+		}catch(InterruptedException e) {
+			return;
+		}
+	}
+}
+
+
+
+
+03
+
+public class Customer implements Runnable{
+	public Master master;
+	
+	public Customer(Master m) {
+		master = m;
+	}
+	
+	public void run() {
+		for(int i = 0; i < 10; ++i) {
+			master.get(i);
+		}
+	}
+}
+
+
+
+public class Producer implements Runnable{
+	public Master master;
+	
+	public Producer(Master m) {
+		master = m;
+	}
+	
+	public void run() {
+		for(int i = 0; i < 10; ++i) {
+			if(i % 2 == 0)
+				master.set(i, "12345");
+			else
+				master.set(i, "abcde");
+		}
+	}
+}
+
+
+
+public class Master {
+	private final static int SIZE = 1;
+	private String array[] = new String[SIZE];
+	private int r = 0;
+	private int w = 0;
+	private int count = 0;
+	
+	public void master() {
+		Master m = new Master();
+		Runnable temp1 = new Producer(m);
+		Runnable temp2 = new Customer(m);	
+		new Thread(temp1).start();
+		new Thread(temp2).start();
+	}
+	
+	public synchronized void set(int index, String a) {
+		if (count >= SIZE) {
+			try {
+				wait();
+			} catch (InterruptedException ie) {
+				ie.printStackTrace();
+				System.exit(0);
+			}
+		}
+		if(a == "12345")
+			System.out.println("Set " + (index + 1) + "-> Item" + 1 + " : 12345");
+		else 
+			System.out.println("Set " + (index + 1) + "-> Item" + 2 + " : abcde");
+		
+		array[w++] = a;
+		if (w >= SIZE)
+			w = 0;
+		++count;
+		notifyAll();
+	}
+	
+	public synchronized void get(int index) {
+		if (count == 0) {
+			try {
+				wait();
+			} catch (InterruptedException ie) {
+				ie.printStackTrace();
+				System.exit(0);
+			}
+		}
+		if(array[r++] == "12345")
+			System.out.println("Get " + (index + 1) + "-> Item" + 1 + " : 12345");
+		else 
+			System.out.println("Get " + (index + 1) + "-> Item" + 2 + " : abcde");
+		
+		if (r >= SIZE)
+			r = 0;
+		--count;
+		notifyAll();
+	}
+}
