@@ -117,13 +117,23 @@ public class Calculator extends JFrame {
     		return;
     	}
     	
-    	String cur, last;
+    	String cur = "", last = "";
     	double num1, num2;
     	String regex1 = "[/*/]";
     	String c = str.replaceAll(regex1, "");	//find the operator "/" or "*"
     	int index = str.indexOf(c);				//find the operator's position
     	while(index != -1) {
-    		int 
+    		int temp = index - 1;
+    		while((str.charAt(temp) - '0') > 0 && (str.charAt(temp) - '0') < 9) {
+    			last = str.charAt(temp) + last;
+    			temp--;
+    		}
+    		
+    		temp = index + 1;
+    		while((str.charAt(temp) - '0') > 0 && (str.charAt(temp) - '0') < 9) {
+    			cur = str.charAt(temp) + cur;
+    			temp++;
+    		}
     	}
     	
     	
