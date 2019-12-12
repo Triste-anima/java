@@ -1,0 +1,148 @@
+import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
+
+@SuppressWarnings("serial")
+public class Calculator extends JFrame {
+    private JTextField textField; 
+	  
+    private void init() {
+        textField = new JTextField();   
+        textField.setEditable(false);
+        textField.setHorizontalAlignment (JTextField.RIGHT);
+        textField.setFont(new Font(null, Font.PLAIN, 20));
+        
+   
+        JPanel panel = new JPanel();
+        panel.setLayout(new GridBagLayout());
+        
+        Container container = getContentPane();
+        container.add(textField, BorderLayout.NORTH);
+        container.add(panel, BorderLayout.CENTER);
+        
+        panel.add(createButton("MC"));
+        panel.add(createButton("MR"));
+        panel.add(createButton("MS"));
+        panel.add(createButton("M+"));
+        panel.add(createButton("M-"));
+        
+        panel.add(createButton("7"));
+        panel.add(createButton("8"));
+        panel.add(createButton("9"));
+        panel.add(createButton("/"));
+        panel.add(createButton("%"));
+        
+        panel.add(createButton("4"));
+        panel.add(createButton("5"));
+        panel.add(createButton("6"));
+        panel.add(createButton("*"));
+        panel.add(createButton("1/x"));
+        
+        panel.add(createButton("1"));
+        panel.add(createButton("2"));
+        panel.add(createButton("3"));
+        panel.add(createButton("-"));
+        panel.add(createButton("="));
+        
+        panel.add(createButton("0"));
+        panel.add(createButton("."));
+        panel.add(createButton("+"));
+        
+        
+    }
+    
+    public JButton createButton (String string) {
+    	// 创建按钮
+        JButton button = new JButton(String.valueOf(string));
+        
+        if(string == "=") {
+        	button.setPreferredSize(new Dimension(50, 100));
+        }
+        else if(string == "0") {
+        	button.setPreferredSize(new Dimension(120, 50));
+        }
+        else {
+        	button.setPreferredSize(new Dimension(50, 50));
+        }
+        
+        button.setFont(new Font("粗体", Font.PLAIN, 15));
+        
+        // 单击时触发
+        button.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent event) {
+                // 获取目标按钮
+            	JButton sourceBtn = (JButton) event.getSource();
+                // 获取按钮上的字符
+                char bottonKey = sourceBtn.getText().charAt(0);
+                // 执行字符对应的操作
+                calculatorAction(bottonKey);
+            }
+        });
+        
+      return button;
+    }
+    
+    private void calculatorAction(char key) {
+        switch(key) {
+            case '.':
+            case '0':
+            case '1':
+            case '2':
+            case '3':
+            case '4':
+            case '5':
+            case '6':
+            case '7':
+            case '8':
+            case '9':
+            case '+':
+            case '-':
+            case '*':
+            case '/':
+                String text = textField.getText() + key;
+                textField.setText(text);
+                break;
+            case '=':
+            	String text2 = textField.getText() + key;
+            	realCal(text2);
+            default:
+            	break;
+        }
+    }
+    
+    public void realCal(String str) {
+    	//check the expression
+    	if(!str.matches("([0-9]+[+-/*/][0-9]+)+")) {
+    		textField.setText("error");
+    		return;
+    	}
+    	
+    	String cur, last;
+    	double num1, num2;
+    	String regex1 = "[/*/]";
+    	String c = str.replaceAll(regex1, "");	//find the operator "/" or "*"
+    	int index = str.indexOf(c);				//find the operator's position
+    	while(index != -1) {
+    		int 
+    	}
+    	
+    	
+    	textField.setText(ans);
+    }
+    
+    public static void main(String[] args) {
+        Calculator calculator = new Calculator();
+        
+        calculator.setTitle("Calculator");
+        calculator.setSize(345, 350);
+//        calculator.setResizable(false);
+        calculator.setLocationRelativeTo(null);
+        calculator.setDefaultCloseOperation(EXIT_ON_CLOSE);
+        
+        calculator.init();
+        
+        // 显示窗口
+        calculator.setVisible(true);
+    }
+}
+
