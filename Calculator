@@ -1,70 +1,249 @@
 import java.awt.*;
 import java.awt.event.*;
+import java.util.Arrays;
+import java.util.Stack;
+
 import javax.swing.*;
 
-@SuppressWarnings("serial")
-public class Calculator extends JFrame {
-    private JTextField textField; 
-	  
-    private void init() {
-        textField = new JTextField();   
-        textField.setEditable(false);
-        textField.setHorizontalAlignment (JTextField.RIGHT);
-        textField.setFont(new Font(null, Font.PLAIN, 20));
+public class Calculator extends JFrame{
+	private JTextField textField; 
+    public static void main(String[] args) {    	
+        Calculator calculator = new Calculator();
+        calculator.init();
+    }
+    public void init(){
+        /*
+         * 窗体的基本设置
+         */
+      textField = new JTextField();   
+      textField.setEditable(false);
+      textField.setHorizontalAlignment (JTextField.RIGHT);
+      textField.setFont(new Font(null, Font.PLAIN, 20));
+      textField.setBackground(Color.WHITE);
+      
+        JFrame jf=new JFrame();
+        jf.setSize(450,450);
+        jf.setTitle("Calculator");
+        jf.setLocationRelativeTo(null);
+        jf.setDefaultCloseOperation(3);
+        jf.setResizable(false);
+        /*
+         * 生成窗体中的各种组件
+         */
+        JButton component1 = createButton("MC");
+        JButton component2 = createButton("MR");
+        JButton component3 = createButton("MS");
+        JButton component4 = createButton("M+");
+        JButton component5 = createButton("M-");
         
-   
-        JPanel panel = new JPanel();
-        panel.setLayout(new GridBagLayout());
+        JButton component6 = createButton("←");
+        JButton component7 = createButton("CE");
+        JButton component8 = createButton("C");
+        JButton component9 = createButton("±");
+        JButton component10 = createButton("√");
         
-        Container container = getContentPane();
-        container.add(textField, BorderLayout.NORTH);
-        container.add(panel, BorderLayout.CENTER);
+        JButton component11 = createButton("7");
+        JButton component12 = createButton("8");
+        JButton component13 = createButton("9");
+        JButton component14 = createButton("/");
+        JButton component15 = createButton("%");
         
-        panel.add(createButton("MC"));
-        panel.add(createButton("MR"));
-        panel.add(createButton("MS"));
-        panel.add(createButton("M+"));
-        panel.add(createButton("M-"));
+        JButton component16 = createButton("4");
+        JButton component17 = createButton("5");
+        JButton component18 = createButton("6");
+        JButton component19 = createButton("*");
+        JButton component20 = createButton("1/x");
         
-        panel.add(createButton("7"));
-        panel.add(createButton("8"));
-        panel.add(createButton("9"));
-        panel.add(createButton("/"));
-        panel.add(createButton("%"));
+        JButton component21 = createButton("1");
+        JButton component22 = createButton("2");
+        JButton component23 = createButton("3");
+        JButton component24 = createButton("-");
+        JButton component25 = createButton("=");
         
-        panel.add(createButton("4"));
-        panel.add(createButton("5"));
-        panel.add(createButton("6"));
-        panel.add(createButton("*"));
-        panel.add(createButton("1/x"));
+        JButton component26 = createButton("0");
+        JButton component27 = createButton(".");
+        JButton component28 = createButton("+");
+
+
+        GridBagLayout gridBagLayout=new GridBagLayout(); //实例化布局对象
+        jf.setLayout(gridBagLayout);                     //jf窗体对象设置为GridBagLayout布局
+        GridBagConstraints gridBagConstraints=new GridBagConstraints();//实例化这个对象用来对组件进行管理
+        gridBagConstraints.fill=GridBagConstraints.BOTH;//该方法是为了设置如果组件所在的区域比组件本身要大时的显示情况 
+        //NONE：不调整组件大小。 
+        //HORIZONTAL：加宽组件，使它在水平方向上填满其显示区域，但是不改变高度。 
+        //VERTICAL：加高组件，使它在垂直方向上填满其显示区域，但是不改变宽度。 
+        //BOTH：使组件完全填满其显示区域。 
+        /*
+         * 分别对组件进行设置
+         */
+        //组件1(gridx,gridy)组件的左上角坐标，gridwidth，gridheight：组件占用的网格行数和列数
+        gridBagConstraints.gridwidth=1;                                             
+        gridBagConstraints.gridheight=1;  
+        gridBagConstraints.insets = new Insets(3, 2, 2, 2);
         
-        panel.add(createButton("1"));
-        panel.add(createButton("2"));
-        panel.add(createButton("3"));
-        panel.add(createButton("-"));
-        panel.add(createButton("="));
+        gridBagConstraints.gridx=0;
+        gridBagConstraints.gridy=0;          
+        gridBagLayout.setConstraints(component1, gridBagConstraints);
+        //组件2
+        gridBagConstraints.gridx=1;
+        gridBagConstraints.gridy=0;         
+        gridBagLayout.setConstraints(component2, gridBagConstraints);
         
-        panel.add(createButton("0"));
-        panel.add(createButton("."));
-        panel.add(createButton("+"));
+
+        gridBagConstraints.gridx=2;
+        gridBagConstraints.gridy=0;
+        gridBagLayout.setConstraints(component3, gridBagConstraints);
+
+        gridBagConstraints.gridx=3;
+        gridBagConstraints.gridy=0;          
+        gridBagLayout.setConstraints(component4, gridBagConstraints);
+
+        gridBagConstraints.gridx=4;
+        gridBagConstraints.gridy=0;      
+        gridBagLayout.setConstraints(component5, gridBagConstraints);
+
+        gridBagConstraints.gridx=0;
+        gridBagConstraints.gridy=1;        
+        gridBagLayout.setConstraints(component6, gridBagConstraints);
+
+        gridBagConstraints.gridx=1;
+        gridBagConstraints.gridy=1;         
+        gridBagLayout.setConstraints(component7, gridBagConstraints);
+
+        gridBagConstraints.gridx=2;
+        gridBagConstraints.gridy=1;         
+        gridBagLayout.setConstraints(component8, gridBagConstraints);
+
+        gridBagConstraints.gridx=3;
+        gridBagConstraints.gridy=1;          
+        gridBagLayout.setConstraints(component9, gridBagConstraints);
+        
+        gridBagConstraints.gridx=4;
+        gridBagConstraints.gridy=1;          
+        gridBagLayout.setConstraints(component10, gridBagConstraints);
+        
+        gridBagConstraints.gridx=0;
+        gridBagConstraints.gridy=2;        
+        gridBagLayout.setConstraints(component11, gridBagConstraints);
+
+        gridBagConstraints.gridx=1;
+        gridBagConstraints.gridy=2;         
+        gridBagLayout.setConstraints(component12, gridBagConstraints);
+
+        gridBagConstraints.gridx=2;
+        gridBagConstraints.gridy=2;         
+        gridBagLayout.setConstraints(component13, gridBagConstraints);
+
+        gridBagConstraints.gridx=3;
+        gridBagConstraints.gridy=2;          
+        gridBagLayout.setConstraints(component14, gridBagConstraints);
+        
+        gridBagConstraints.gridx=4;
+        gridBagConstraints.gridy=2;          
+        gridBagLayout.setConstraints(component15, gridBagConstraints);
+        
+        gridBagConstraints.gridx=0;
+        gridBagConstraints.gridy=3;        
+        gridBagLayout.setConstraints(component16, gridBagConstraints);
+
+        gridBagConstraints.gridx=1;
+        gridBagConstraints.gridy=3;         
+        gridBagLayout.setConstraints(component17, gridBagConstraints);
+
+        gridBagConstraints.gridx=2;
+        gridBagConstraints.gridy=3;         
+        gridBagLayout.setConstraints(component18, gridBagConstraints);
+
+        gridBagConstraints.gridx=3;
+        gridBagConstraints.gridy=3;          
+        gridBagLayout.setConstraints(component19, gridBagConstraints);
+        
+        gridBagConstraints.gridx=4;
+        gridBagConstraints.gridy=3;          
+        gridBagLayout.setConstraints(component20, gridBagConstraints);
+        
+        gridBagConstraints.gridx=0;
+        gridBagConstraints.gridy=4;        
+        gridBagLayout.setConstraints(component21, gridBagConstraints);
+
+        gridBagConstraints.gridx=1;
+        gridBagConstraints.gridy=4;         
+        gridBagLayout.setConstraints(component22, gridBagConstraints);
+
+        gridBagConstraints.gridx=2;
+        gridBagConstraints.gridy=4;         
+        gridBagLayout.setConstraints(component23, gridBagConstraints);
+
+        gridBagConstraints.gridx=3;
+        gridBagConstraints.gridy=4;          
+        gridBagLayout.setConstraints(component24, gridBagConstraints);
+
+        gridBagConstraints.gridx=2;
+        gridBagConstraints.gridy=5;         
+        gridBagLayout.setConstraints(component27, gridBagConstraints);
+
+        gridBagConstraints.gridx=3;
+        gridBagConstraints.gridy=5;         
+        gridBagLayout.setConstraints(component28, gridBagConstraints);
+        
+        gridBagConstraints.gridx=4;
+        gridBagConstraints.gridy=4;
+        gridBagConstraints.gridwidth=1;                                             
+        gridBagConstraints.gridheight=2;   
+        gridBagLayout.setConstraints(component25, gridBagConstraints);
+        
+        gridBagConstraints.gridx=0;
+        gridBagConstraints.gridy=5;
+        gridBagConstraints.gridwidth=2;                                             
+        gridBagConstraints.gridheight=1;   
+        gridBagLayout.setConstraints(component26, gridBagConstraints);
+        
+        gridBagConstraints.gridx=0;
+        gridBagConstraints.gridy=-1;
+        gridBagConstraints.gridwidth=5;                                             
+        gridBagConstraints.gridheight=1;   
+        gridBagLayout.setConstraints(textField, gridBagConstraints);
+        
+        /*
+         * 把所有组件加入jf窗体对象中去
+         */
+        jf.add(textField);
+        jf.add(component1);
+        jf.add(component2);
+        jf.add(component3);
+        jf.add(component4);
+        jf.add(component5);
+        jf.add(component6);
+        jf.add(component7);
+        jf.add(component8);
+        jf.add(component9);
+        jf.add(component10);
+        jf.add(component11);
+        jf.add(component12);
+        jf.add(component13);
+        jf.add(component14);
+        jf.add(component15);
+        jf.add(component16);
+        jf.add(component17);
+        jf.add(component18);
+        jf.add(component19);
+        jf.add(component20);
+        jf.add(component21);
+        jf.add(component22);
+        jf.add(component23);
+        jf.add(component24);
+        jf.add(component25);
+        jf.add(component26);
+        jf.add(component27);
+        jf.add(component28);
+
+        jf.setVisible(true);
         
         
     }
-    
     public JButton createButton (String string) {
     	// 创建按钮
-        JButton button = new JButton(String.valueOf(string));
-        
-        if(string == "=") {
-        	button.setPreferredSize(new Dimension(50, 100));
-        }
-        else if(string == "0") {
-        	button.setPreferredSize(new Dimension(120, 50));
-        }
-        else {
-        	button.setPreferredSize(new Dimension(50, 50));
-        }
-        
+        JButton button = new JButton(String.valueOf(string));    
         button.setFont(new Font("粗体", Font.PLAIN, 15));
         
         // 单击时触发
@@ -73,86 +252,114 @@ public class Calculator extends JFrame {
                 // 获取目标按钮
             	JButton sourceBtn = (JButton) event.getSource();
                 // 获取按钮上的字符
-                char bottonKey = sourceBtn.getText().charAt(0);
+                String bottonKey = sourceBtn.getText();
                 // 执行字符对应的操作
                 calculatorAction(bottonKey);
             }
         });
-        
-      return button;
+//        System.out.println("am i here");
+        return button;
     }
     
-    private void calculatorAction(char key) {
+    private void calculatorAction(String key) {
         switch(key) {
-            case '.':
-            case '0':
-            case '1':
-            case '2':
-            case '3':
-            case '4':
-            case '5':
-            case '6':
-            case '7':
-            case '8':
-            case '9':
-            case '+':
-            case '-':
-            case '*':
-            case '/':
+            case ".":
+            case "0":
+            case "1":
+            case "2":
+            case "3":
+            case "4":
+            case "5":
+            case "6":
+            case "7":
+            case "8":
+            case "9":
+            case "+":
+            case "-":
+            case "*":
+            case "/":
                 String text = textField.getText() + key;
                 textField.setText(text);
                 break;
-            case '=':
+            case "=":
             	String text2 = textField.getText() + key;
             	realCal(text2);
+            	break;
+            case "MC":
+            	textField.setText("");
+                break;
             default:
             	break;
         }
     }
     
     public void realCal(String str) {
-    	//check the expression
-    	if(!str.matches("([0-9]+[+-/*/][0-9]+)+")) {
-    		textField.setText("error");
-    		return;
+    	String[] words = splits(str);
+//    	for(int i = 0; i < words.length; ++i)
+//			System.out.println(words[i]);
+    	
+    	Stack<Double> stack = new Stack<Double>();	//store nums
+    	for(int i = 0; i < words.length; ++i) {
+    		if(words[i].equals("+")) {
+    			stack.push(Double.parseDouble("".equals(words[i + 1]) ? "0.00" : words[i + 1]));
+    			i++;
+    		}
+    		else if(words[i].equals("-")) {
+    			stack.push(-Double.parseDouble("".equals(words[i + 1]) ? "0.00" : words[i + 1]));
+    			i++;
+    		}
+    		else if(words[i].equals("*")) {
+    			Double temp1 = stack.peek();
+    			stack.pop();
+    			Double temp2 = Double.parseDouble("".equals(words[i + 1]) ? "0.00" : words[i + 1]);
+    			stack.push(temp1 * temp2);
+    			i++;
+    		}
+    		else if(words[i].equals("/")) {
+    			Double temp1 = stack.peek();
+    			stack.pop();
+    			Double temp2 = Double.parseDouble("".equals(words[i + 1]) ? "0.00" : words[i + 1]);
+    			if(temp2 == 0.00) {
+    				textField.setText("0 is not allow to be the divisor");
+    				return;
+    			}
+    				
+    			stack.push(temp1 / temp2);
+    			i++;
+    		}
+    		else {
+    			stack.push(Double.parseDouble("".equals(words[i]) ? "0.00" : words[i]));
+    		}
     	}
     	
-    	String cur = "", last = "";
-    	double num1, num2;
-    	String regex1 = "[/*/]";
-    	String c = str.replaceAll(regex1, "");	//find the operator "/" or "*"
-    	int index = str.indexOf(c);				//find the operator's position
-    	while(index != -1) {
-    		int temp = index - 1;
-    		while((str.charAt(temp) - '0') > 0 && (str.charAt(temp) - '0') < 9) {
-    			last = str.charAt(temp) + last;
-    			temp--;
-    		}
-    		
-    		temp = index + 1;
-    		while((str.charAt(temp) - '0') > 0 && (str.charAt(temp) - '0') < 9) {
-    			cur = str.charAt(temp) + cur;
-    			temp++;
-    		}
+    	double ans = 0;
+    	while(!stack.empty()) {
+    		ans += stack.peek();
+    		stack.pop();
     	}
-    	
-    	
-    	textField.setText(ans);
+    	String real_ans = String.valueOf(ans);
+    	textField.setText(real_ans);
     }
     
-    public static void main(String[] args) {
-        Calculator calculator = new Calculator();
-        
-        calculator.setTitle("Calculator");
-        calculator.setSize(345, 350);
-//        calculator.setResizable(false);
-        calculator.setLocationRelativeTo(null);
-        calculator.setDefaultCloseOperation(EXIT_ON_CLOSE);
-        
-        calculator.init();
-        
-        // 显示窗口
-        calculator.setVisible(true);
-    }
+    
+    public String[] splits(String str) {
+    	String[] result = new String[str.length()];
+    	String temp = "";
+    	int counts = 0;
+    	for(int i = 0; i < str.length(); ++i) {
+    		while(((str.charAt(i)- '0') >= 0 && (str.charAt(i) - '0') <= 9) || str.charAt(i) == '.') {
+    			temp += str.charAt(i);
+    			i++;
+    		}
+    		result[counts] = temp;
+    		counts++;
+    		if((str.charAt(i) == '='))
+    			break;
+    		result[counts] = "" + str.charAt(i);
+    		counts++;
+    		temp = "";
+    	}
+    	String[] real_result = Arrays.copyOf(result, counts);
+    	return real_result;
+    }  
 }
-
