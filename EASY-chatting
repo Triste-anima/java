@@ -1,0 +1,170 @@
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
+
+public class Server implements Runnable{
+	static List<Socket> clients = new ArrayList<Socket>();	//All sockets
+    static Socket socket = null;
+    static ServerSocket serverSocket = null;
+    
+    public Server() {
+    	try {
+			serverSocket = new ServerSocket(6666);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+    }
+    
+	public static void main(String[] args) {
+        Scanner input = new Scanner(System.in);
+        System.out.println("The server is running...");
+        Server t = new Server();
+        int count = 0;
+        while (true) {
+        	try {
+        		System.out.println("The port 6666 is waiting...");
+        		socket = serverSocket.accept();
+        		count++;
+        		System.out.println("The client " + count + " is connected!");
+        		clients.add(socket);
+        	} catch (IOException e) {
+        		e.printStackTrace();
+        	}
+        	Print p = new Print(socket);
+        	Thread read = new Thread(t);
+        	Thread print = new Thread(p);
+        	read.start();
+        	print.start();
+        }
+    }
+    
+	@Override
+    public void run() {
+    	try {
+    		Thread.sleep(1000);
+    		BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+    		while(true) {
+    			String end = in.readLine();
+    			System.out.println(end);
+    			for(int i = 0; i < clients.size(); ++i) {
+    				Socket socket = clients.get(i);
+    				PrintWriter out = new PrintWriter(socket.getOutputStream());
+    				if(socket != Server.socket) {
+    					out.println("->Receive: " + end);    				
+    				}
+    				out.flush();
+    			}
+    		}
+    	} catch (Exception e) {
+    		e.printStackTrace();
+    	}
+    }
+}
+
+class Print implements Runnable {
+	static List<Socket> clients = new ArrayList<Socket>();	//All sockets
+	Scanner input = new Scanner(System.in);
+	public Print(Socket s) {
+		try {
+			clients.add(s);
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	@Override
+	public void run() {
+		try {
+			Thread.sleep(1000);
+			while(true) {
+				String message = input.nextLine();
+				for(int i = 0; i < clients.size(); ++i) {
+					Socket socket = clients.get(i);
+					PrintWriter out = new PrintWriter(socket.getOutputStream());
+					out.println("->Receive: " + message);
+					out.flush();
+				}
+			}
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+}
+
+
+
+
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.net.Socket;
+import java.util.Scanner;
+
+/**
+ * 客户端程序
+ */
+public class Client implements Runnable{
+	static Socket socket = null;
+	Scanner input = new Scanner(System.in);
+	static String id = null;
+    public static void main(String[] args) {
+        int x = (int)(Math.random() * 20);
+        Client.id = "Client" + x;
+        System.out.println("----------------The client----------------");
+        try {
+        	socket = new Socket("127.0.0.1", 6666);
+        	System.out.println("The client is already connected...");
+        }catch (Exception e) {
+			e.printStackTrace();
+		}
+        Client t = new Client();
+        Read r = new Read(socket);
+        Thread print = new Thread(t);
+        Thread read = new Thread(r);
+        print.start();
+        read.start();
+    }
+    
+    @Override
+    public void run() {
+    	try {
+    		Thread.sleep(1000);
+    		PrintWriter out = new PrintWriter(socket.getOutputStream());
+    		while(true) {
+    			String message = input.nextLine();
+    			out.println("->Receive: " + message);
+    			out.flush();
+    		}
+    	}catch (Exception e) {
+			e.printStackTrace();
+		}
+    }
+}
+
+class Read implements Runnable {
+	static Socket socket = null;
+	public Read(Socket socket) {
+		Read.socket = socket;
+	}
+	
+	@Override
+	public void run() {
+		try {
+			Thread.sleep(1000);
+			BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+			while(true) {
+				System.out.println(in.readLine());
+			}
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+}
+
