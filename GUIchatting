@@ -1,0 +1,193 @@
+import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+/**
+ * 服务器端窗口，先运行这个
+ */
+public class Server {
+
+    public static void main(String[] args) {
+        // 创建窗体
+        JFrame f = new JFrame("服务器");
+        f.setLayout(null);
+        // 设置大小和位置
+        f.setSize(400, 300);
+        f.setLocation(100, 200);
+
+        JButton b = new JButton("发送");
+        b.setBounds(290, 220, 80, 30);
+        f.add(b);
+
+        JTextField tf = new JTextField();
+        tf.setBounds(10, 220, 260, 30);
+        f.add(tf);
+
+        JTextArea ta = new JTextArea();
+        ta.setBounds(10, 10, 360, 200);
+        f.add(ta);
+
+        f.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        f.setVisible(true);
+
+        try {
+            ServerSocket ss = new ServerSocket(8888);
+            Socket s = ss.accept();
+
+            b.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    // 获取输入文本
+                    String text = tf.getText();
+                    Date date = new Date();
+                    SimpleDateFormat sdf = new SimpleDateFormat("MM-dd HH:mm:ss");
+                    String now = sdf.format(date);
+                    ta.append(now +"\r\n我：" + text + "\r\n");
+                    ta.setCaretPosition(ta.getText().length());
+                    // 设置输入框为空
+                    tf.setText("");
+                    // 发送信息
+                    try {
+                        DataOutputStream dos = new DataOutputStream(s.getOutputStream());
+                        dos.writeUTF(text);
+                    } catch (IOException e1) {
+                        e1.printStackTrace();
+                    }
+                }
+            });
+
+            // 接收信息线程
+            new Thread() {
+                @Override
+                public void run() {
+                    while (true) {
+                        try {
+                            // 获取其他用户的输入
+                            DataInputStream dis = new DataInputStream(s.getInputStream());
+                            String text = dis.readUTF();
+                            String ip = s.getInetAddress().getHostAddress();
+                            Date date = new Date();
+                            SimpleDateFormat sdf = new SimpleDateFormat("MM-dd HH:mm:ss");
+                            String now = sdf.format(date);
+                            // 添加到页面上
+                            ta.append(now + "\r\n" + ip + "：" + text + "\r\n");
+                            ta.setCaretPosition(ta.getText().length());
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            }.start();
+
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+    }
+
+}
+
+
+
+
+import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.net.Socket;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+/**
+ * 客户端程序
+ */
+public class Client {
+
+    public static void main(String[] args) {
+        // 创建窗体
+        JFrame f = new JFrame("客户端");
+        f.setLayout(null);
+        // 设置大小和位置
+        f.setSize(400, 300);
+        f.setLocation(100, 200);
+
+        JButton b = new JButton("发送");
+        b.setBounds(290, 220, 80, 30);
+        f.add(b);
+
+        JTextField tf = new JTextField();
+        tf.setBounds(10, 220, 260, 30);
+        f.add(tf);
+
+        JTextArea ta = new JTextArea();
+        ta.setBounds(10, 10, 360, 200);
+        f.add(ta);
+
+        f.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        f.setVisible(true);
+
+        try {
+            Socket s = new Socket("127.0.0.1", 8888);
+
+            b.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    // 获取输入文本
+                    String text = tf.getText();
+                    Date date = new Date();
+                    SimpleDateFormat sdf = new SimpleDateFormat("MM-dd HH:mm:ss");
+                    String now = sdf.format(date);
+                    ta.append(now +"\r\n我：" + text + "\r\n");
+                    // 设置输入框为空
+                    tf.setText("");
+                    // 发送信息
+                    try {
+                        DataOutputStream dos = new DataOutputStream(s.getOutputStream());
+                        dos.writeUTF(text);
+                    } catch (IOException e1) {
+                        e1.printStackTrace();
+                    }
+                }
+            });
+
+            // 接收信息线程
+            new Thread() {
+                @Override
+                public void run() {
+                    while (true) {
+                        try {
+                            // 获取其他用户的输入
+                            DataInputStream dis = new DataInputStream(s.getInputStream());
+                            String text = dis.readUTF();
+                            String ip = s.getInetAddress().getHostAddress();
+                            Date date = new Date();
+                            SimpleDateFormat sdf = new SimpleDateFormat("MM-dd HH:mm:ss");
+                            String now = sdf.format(date);
+                            // 添加到页面上
+                            ta.append(now + "\r\n" + ip + "：" + text + "\r\n");
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            }.start();
+
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+}
+
