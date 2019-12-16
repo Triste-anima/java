@@ -1,0 +1,194 @@
+package server;
+
+import java.io.IOException;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+
+public class Server {
+	private static List<Socket> socketlist = Collections.synchronizedList(new ArrayList<Socket>());
+	public static void main(String[] args) {
+		System.out.println("-------------server---------------");
+		int count = 0;
+		try {
+			ServerSocket ss = new ServerSocket(12138);
+			while(true){
+				Socket s = ss.accept();
+				count++;
+				socketlist.add(s);
+				System.out.println("Welcom client " + s.getPort());
+				if(count > 1)
+					System.out.println("Now there are " + count + " clients on line...");
+				else 
+					System.out.println("Now there is " + count + " client on line...");
+				new Thread(new DispatcherMessage(s,socketlist)).start();
+			}
+		 } catch (IOException e) {
+			e.printStackTrace();
+		}	
+	}
+}
+
+
+
+package server;
+
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.net.Socket;
+import java.util.List;
+
+public class DispatcherMessage implements Runnable{
+	private Socket s = null;
+	private BufferedReader br = null;
+	private List<Socket> socketlist = null;
+	public DispatcherMessage(Socket s,List<Socket> socketlist) {
+		this.socketlist = socketlist;
+		this.s = s;
+		try {
+			br = new BufferedReader(new InputStreamReader(s.getInputStream()));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	public void DispathcherMessage(){
+		String test = null;
+		String result = null;
+		try {
+			while((test=br.readLine())!=null){
+				for(Socket allsocket:socketlist){
+					if(!s.equals(allsocket)){
+						result = test;
+						System.out.println("Receive message from clients " + result);
+						BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(allsocket.getOutputStream()));
+						bw.write(result);
+						bw.newLine();
+						bw.flush();
+					}
+				}
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	public void run() {
+		while(true){
+		DispathcherMessage();
+	}
+	}
+}
+
+
+
+package client;
+
+import java.net.InetAddress;
+import java.net.Socket;
+
+public class Client {
+	public static void main(String[] args) throws Exception {
+		Socket ss = new Socket(InetAddress.getLocalHost(), 12138);
+		System.out.println("----------------The client " + ss.getLocalPort() + "----------------");
+		new Thread(new ReceiceMessage(ss)).start();
+		new Thread(new SendMessage(ss)).start();
+	}
+}
+
+
+
+
+package client;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.Socket;
+
+public class ReceiceMessage implements Runnable {
+	private Socket s;
+	private BufferedReader br = null;
+	public ReceiceMessage(Socket s) {
+		try {
+			this.s = s;
+			this.br = new BufferedReader(new InputStreamReader(s.getInputStream()));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	//Print the receive message from other clients
+	public String recive(){
+		String test = null;
+		String result = null;
+		try {
+			while((test = br.readLine()) != null){
+				 result = test;
+				 System.out.println("->Receive from " + result);
+			}
+				
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+	public void run() {
+		while(true){
+			recive();
+		}
+	}
+}
+
+
+
+
+
+package client;
+
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.net.Socket;
+
+public class SendMessage implements Runnable {
+	private BufferedWriter bw = null;
+	private Socket socket;
+	
+	public SendMessage(Socket s){
+		try {
+			socket = s;
+			bw = new BufferedWriter(new OutputStreamWriter(s.getOutputStream()));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	//Send message to other clients
+	public void Writer(){
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		String test = null;
+		String result = null;
+		try {
+			while((test=br.readLine())!=null){
+				result = test;
+				bw.write(socket.getLocalPort() + ": " + result);
+				bw.newLine();
+				bw.flush();
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void run() {
+		while(true){
+			Writer();
+		}	
+	}
+}
+
