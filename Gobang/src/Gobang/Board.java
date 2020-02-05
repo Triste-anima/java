@@ -75,7 +75,7 @@ public class Board extends JPanel implements MouseListener{
 					Point to_delete = to_remove.getCor();
 					isChess[to_delete.x][to_delete.y] = 0;
 					chesses.remove(chesses.size() - 1);
-					turn = 1 - turn;
+					turn = 1 - turn;	
 					repaint();
 				}
 			}
@@ -89,8 +89,8 @@ public class Board extends JPanel implements MouseListener{
 	
 	private void initBoard() {
 		chesses.clear();
-		for(int i = 0; i < 15; ++i)
-			for(int j = 0; j < 15; ++j)
+		for(int i = 0; i < 14; ++i)
+			for(int j = 0; j < 14; ++j)
 				isChess[i][j] = 0;
 		turn = 0;
 		repaint();
@@ -137,7 +137,7 @@ public class Board extends JPanel implements MouseListener{
 		// 判断鼠标点击位置是否在某个交点附近
 		for(int i = 0; i < 15; ++i) {
 			for(int j = 0; j < 15; ++j) {
-				if(Math.abs(pos.x - inter[i][j].x) <= 10 && Math.abs(pos.y - inter[i][j].y) <= 10) {
+				if(Math.abs(pos.x - inter[i][j].x) <= 5 && Math.abs(pos.y - inter[i][j].y) <= 5) {
 					if(isChess[i][j] == 0) {
 						if(turn == 0)
 							isChess[i][j] = 1;
@@ -145,7 +145,7 @@ public class Board extends JPanel implements MouseListener{
 							isChess[i][j] = -1;
 						
 						putChess(inter[i][j]);
-						repaint();
+						check_heqi();
 						judge(isChess[i][j], i, j);	//只用检查刚刚下的棋子
 					}
 					break;
@@ -164,12 +164,30 @@ public class Board extends JPanel implements MouseListener{
 			chesses.add(add_chess);
 			turn = 0;
 		}
+		repaint();
 	}
+	
+	// 检查是否和棋
+	private void check_heqi() {
+		for(int i = 0; i < 15; ++i)
+			for(int j = 0; j < 15; ++j)
+				if(isChess[i][j] == 0)
+					return;
+		
+		show_heqi();
+	}
+	
+	private void show_heqi() {
+		JOptionPane.showMessageDialog(this, "棋逢对手！来日再战！", "Brova", JOptionPane.PLAIN_MESSAGE);
+		initBoard();
+	}
+	
 	private void show_win(int attr) {
 		if(attr == 1)
 			JOptionPane.showMessageDialog(this, "恭喜白棋获胜！", "Brova", JOptionPane.PLAIN_MESSAGE);
 		else 
 			JOptionPane.showMessageDialog(this, "恭喜黑棋获胜！", "Brova", JOptionPane.PLAIN_MESSAGE);
+		
 		initBoard();
 	}
 	
