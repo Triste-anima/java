@@ -4,6 +4,8 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Point;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.LinkedList;
@@ -14,26 +16,26 @@ import javax.swing.JPanel;
 
 public class Board extends JPanel implements MouseListener{
 	/**
-	 * ÆåÅÌ
-	 * Îå×ÓÆåÒ»¹²ÓĞ169¸ö¸ñ×Ó,ÔÚÆåÅÌÉÏ,ºá×İÏß½»²æĞÎ³ÉÁË225¸ö½»²æµãÎª¶ÔŞÄÊ±µÄÂä×Óµã¡£
+	 * æ£‹ç›˜
+	 * äº”å­æ£‹ä¸€å…±æœ‰169ä¸ªæ ¼å­,åœ¨æ£‹ç›˜ä¸Š,æ¨ªçºµçº¿äº¤å‰å½¢æˆäº†225ä¸ªäº¤å‰ç‚¹ä¸ºå¯¹å¼ˆæ—¶çš„è½å­ç‚¹ã€‚
 	 */
-	// »®ÏßÎ»ÖÃ
+	// åˆ’çº¿ä½ç½®
 	private int[][] line_begin_pos;
 	private int[][] line_end_pos;
-	// ½»µãÎ»ÖÃ, ÓÃÀ´ÅĞ¶ÏÊó±êµã»÷µ½ÄÄ¸ö½»µã
+	// äº¤ç‚¹ä½ç½®, ç”¨æ¥åˆ¤æ–­é¼ æ ‡ç‚¹å‡»åˆ°å“ªä¸ªäº¤ç‚¹
 	private Point[][] inter;
-	// ¸ÃÎ»ÖÃÊÇ·ñÓĞÆå×Ó   0-ÎŞ£» 1-°×£» -1-ºÚ
+	// è¯¥ä½ç½®æ˜¯å¦æœ‰æ£‹å­   0-æ— ï¼› 1-ç™½ï¼› -1-é»‘
 	private int[][] isChess;
-	// ´æ·ÅÆå×Ó
+	// å­˜æ”¾æ£‹å­
 	private LinkedList<Chess> chesses;
-	// ÂÖµ½Ë­ÏÂ   0-°××Ó£» 1-ºÚ×Ó
+	// è½®åˆ°è°ä¸‹   0-ç™½å­ï¼› 1-é»‘å­
 	private int turn;
-	// ÖØĞÂ¿ªÊ¼¡¢»ÚÆå°´Å¥
+	// é‡æ–°å¼€å§‹ã€æ‚”æ£‹æŒ‰é’®
 	JButton start;
 	JButton regret;
 	
 	public Board() {
-		// ³õÊ¼»¯ÆåÅÌ
+		// åˆå§‹åŒ–æ£‹ç›˜
 		line_begin_pos = new int[][] {
 			{12, 12}, {37, 12}, {62, 12}, {87, 12}, {112, 12}, 
 			{137, 12}, {162, 12}, {187, 12}, {212, 12}, {237, 12}, 
@@ -44,7 +46,7 @@ public class Board extends JPanel implements MouseListener{
 			{137, 362}, {162, 362}, {187, 362}, {212, 362}, {237, 362},
 			{262, 362}, {287, 362}, {312, 362}, {337, 362}, {362, 362}
 		};
-		// ³õÊ¼»¯½»µãÎ»ÖÃ
+		// åˆå§‹åŒ–äº¤ç‚¹ä½ç½®
 		inter = new Point[15][15];
 		for(int i = 0; i < 15; ++i) {
 			for(int j = 0; j < 15; ++j) {
@@ -53,10 +55,33 @@ public class Board extends JPanel implements MouseListener{
 				inter[i][j] = new Point(x, y);
 			}
 		}
-		// ³õÊ¼»¯°´Å¥
-		start = new JButton("¿ªÊ¼");
-		regret = new JButton("»ÚÆå");
+		// åˆå§‹åŒ–æŒ‰é’®
+		start = new JButton("å¼€å§‹");
+		start.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				initBoard();
+				repaint();
+			}
+		});
+		regret = new JButton("æ‚”æ£‹");
+		regret.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				if(!chesses.isEmpty()) {
+					Chess to_remove = chesses.getLast();
+					Point to_delete = to_remove.getCor();
+					isChess[to_delete.x][to_delete.y] = 0;
+					chesses.remove(chesses.size() - 1);
+					turn = 1 - turn;
+					repaint();
+				}
+			}
+		});
 		
+		isChess = new int[15][15];
 		chesses = new LinkedList<Chess>();
 		initBoard();
 		this.addMouseListener(this);
@@ -64,22 +89,25 @@ public class Board extends JPanel implements MouseListener{
 	
 	private void initBoard() {
 		chesses.clear();
-		isChess = new int[15][15];
+		for(int i = 0; i < 15; ++i)
+			for(int j = 0; j < 15; ++j)
+				isChess[i][j] = 0;
 		turn = 0;
+		repaint();
 	}
 	
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
-		// »­³öÆåÅÌ
+		// ç”»å‡ºæ£‹ç›˜
 		g.setColor(Color.BLACK);
 		for(int i = 0; i < 15; ++i) {
-			// ÊúÏß
+			// ç«–çº¿
 			g.drawLine(line_begin_pos[i][0], line_begin_pos[i][1], line_end_pos[i][0], line_end_pos[i][1]);
-			// ºáÏß
+			// æ¨ªçº¿
 			g.drawLine(line_begin_pos[i][1], line_begin_pos[i][0], line_end_pos[i][1], line_end_pos[i][0]);
 		}
 		
-		// »­Æå×Ó
+		// ç”»æ£‹å­
 		for(int i = 0; i < chesses.size(); ++i) {
 			Chess temp = chesses.get(i);
 			Point p = temp.getPos();
@@ -90,13 +118,13 @@ public class Board extends JPanel implements MouseListener{
 			
 			g.fillOval(p.x - 12, p.y - 12, 24, 24);
 		}
-		// »­Á½¸ö°´Å¥
-		start.setFont(new Font("Î¢ÈíÑÅºÚ", Font.BOLD, 20));
+		// ç”»ä¸¤ä¸ªæŒ‰é’®
+		start.setFont(new Font("å¾®è½¯é›…é»‘", Font.BOLD, 20));
 		start.setBounds(380, 150, 80, 40);
 		this.add(start);
 		start.addMouseListener(this);
 		
-		regret.setFont(new Font("Î¢ÈíÑÅºÚ", Font.BOLD, 20));
+		regret.setFont(new Font("å¾®è½¯é›…é»‘", Font.BOLD, 20));
 		regret.setBounds(380, 200, 80, 40);
 		this.add(regret);
 		regret.addMouseListener(this);
@@ -105,39 +133,27 @@ public class Board extends JPanel implements MouseListener{
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		System.out.println("click");
-		if(start.equals(e.getSource())) {
-			initBoard();
-			repaint();
-		}
-		else if(regret.equals(e.getSource())) {
-			if(!chesses.isEmpty()) {
-				chesses.remove(chesses.size() - 1);
-				repaint();
-			}	
-		} else {
-			Point pos = e.getPoint();
-			// ÅĞ¶ÏÊó±êµã»÷Î»ÖÃÊÇ·ñÔÚÄ³¸ö½»µã¸½½ü
-			for(int i = 0; i < 15; ++i) {
-				for(int j = 0; j < 15; ++j) {
-					if(Math.abs(pos.x - inter[i][j].x) <= 10 && Math.abs(pos.y - inter[i][j].y) <= 10) {
-						if(isChess[i][j] == 0) {
-							if(turn == 0)
-								isChess[i][j] = 1;
-							else if(turn == 1)
-								isChess[i][j] = -1;
-							
-							putChess(inter[i][j]);
-							repaint();
-							judge(i, j);	//Ö»ÓÃ¼ì²é¸Õ¸ÕÏÂµÄÆå×Ó
-						}
-						break;
+		Point pos = e.getPoint();
+		// åˆ¤æ–­é¼ æ ‡ç‚¹å‡»ä½ç½®æ˜¯å¦åœ¨æŸä¸ªäº¤ç‚¹é™„è¿‘
+		for(int i = 0; i < 15; ++i) {
+			for(int j = 0; j < 15; ++j) {
+				if(Math.abs(pos.x - inter[i][j].x) <= 10 && Math.abs(pos.y - inter[i][j].y) <= 10) {
+					if(isChess[i][j] == 0) {
+						if(turn == 0)
+							isChess[i][j] = 1;
+						else if(turn == 1)
+							isChess[i][j] = -1;
+						
+						putChess(inter[i][j]);
+						repaint();
+						judge(isChess[i][j], i, j);	//åªç”¨æ£€æŸ¥åˆšåˆšä¸‹çš„æ£‹å­
 					}
+					break;
 				}
 			}
 		}
 	}
-	// Âä×Ó
+	// è½å­
 	private void putChess(Point p) {
 		if(turn == 0) {
 			Chess add_chess = new Chess(p, "white");
@@ -151,20 +167,32 @@ public class Board extends JPanel implements MouseListener{
 	}
 	private void show_win(int attr) {
 		if(attr == 1)
-			JOptionPane.showMessageDialog(this, "¹§Ï²°×Æå»ñÊ¤£¡", "Brova", JOptionPane.PLAIN_MESSAGE);
+			JOptionPane.showMessageDialog(this, "æ­å–œç™½æ£‹è·èƒœï¼", "Brova", JOptionPane.PLAIN_MESSAGE);
 		else 
-			JOptionPane.showMessageDialog(this, "¹§Ï²ºÚÆå»ñÊ¤£¡", "Brova", JOptionPane.PLAIN_MESSAGE);
+			JOptionPane.showMessageDialog(this, "æ­å–œé»‘æ£‹è·èƒœï¼", "Brova", JOptionPane.PLAIN_MESSAGE);
 		initBoard();
 	}
 	
-	// ÅĞ¶ÏÊäÓ®
-	private void judge(int r, int c) {
-		if(search_win(isChess[r][c], r, c))
-			show_win(isChess[r][c]);
+	// åˆ¤æ–­è¾“èµ¢
+	private void judge(int attr, int r, int c) {
+		// æœç´¢ä»¥è½å­ç‚¹ä¸ºä¸­å¿ƒï¼Œè¾¹é•¿ä¸º5çš„æ–¹é˜µ
+		for(int i = r - 2; i <= r + 2; ++i) {
+			if(i >= 0 && i <= 14) {
+				for(int j = c - 2; j <= c + 2; ++j) {
+					if(j >= 0 && j <= 14) {
+						if(isChess[i][j] == attr && search_win(isChess[i][j], i, j)) {
+							show_win(isChess[i][j]);
+							return;
+						}		
+					}
+				}
+			}
+		}
+		
 	}
 	
 	private boolean search_win(int attr, int r, int c) {
-		// ×ö°Ë¸ö·½ÏòµÄËÑË÷
+		// åšå…«ä¸ªæ–¹å‘çš„æœç´¢
 		if(left(attr, r, c, 0))
 			return true;
 		if(up_left(attr, r, c, 0))
@@ -186,7 +214,7 @@ public class Board extends JPanel implements MouseListener{
 	}
 	
 	private boolean left(int attr, int r, int c, int cur_count) {
-		if(cur_count >= 5)
+		if(cur_count == 5)
 			return true;
 		
 		if(c > 0 && isChess[r][c] == attr)
