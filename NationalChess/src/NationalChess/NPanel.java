@@ -15,7 +15,7 @@ import javax.swing.JPanel;
 import Chess.*;
 
 public class NPanel extends JPanel implements MouseListener{
-	// µ¼ÈëÍ¼Æ¬
+	// å¯¼å…¥å›¾ç‰‡
 	ImageIcon black_PAWN = new ImageIcon("BLACK_PAWN.png");
 	ImageIcon black_ROOK = new ImageIcon("BLACK_ROOK.png");
 	ImageIcon black_KNIGHT = new ImageIcon("BLACK_KNIGHT.png");
@@ -31,25 +31,25 @@ public class NPanel extends JPanel implements MouseListener{
 	ImageIcon white_KING = new ImageIcon("WHITE_KING.png");
 	
 	ImageIcon board = new ImageIcon("board.jpg");
-	// µ±Ç°µØÍ¼
+	// å½“å‰åœ°å›¾
 	int[][] cur_map = new int[8][8];
-	// ¶¨ÒåÆå×Ó
+	// å®šä¹‰æ£‹å­
 	Pawn[] b_pawn, w_pawn;
 	Rook b_rook, w_rook;
 	Knight b_knight, w_knight;
 	Bishop b_bishop, w_bishop;
 	Queen b_queen, w_queen;
 	King b_king, w_king;
-	// ´æ·ÅËùÓĞÆå×Ó
+	// å­˜æ”¾æ‰€æœ‰æ£‹å­
 	LinkedList<Chess> chesses = new LinkedList<Chess>();
-	// ÂÖÁ÷ÏÂ×Ó£º  -1-°×  1-ºÚ
+	// è½®æµä¸‹å­ï¼š  -1-ç™½  1-é»‘
 	int turn;
-	// ±øµÄÉı±äÑ¡Ïî
+	// å…µçš„å‡å˜é€‰é¡¹
 	Object[] options = {"Rook", "Knight", "Bishop", "Queen"};
 	
 	public NPanel() {
 		new My_map();
-		// Ëõ·ÅÍ¼Æ¬
+		// ç¼©æ”¾å›¾ç‰‡
 		black_PAWN = change(black_PAWN, 0.2);
 		black_ROOK = change(black_ROOK, 0.2);
 		black_KNIGHT = change(black_KNIGHT, 0.2);
@@ -72,13 +72,13 @@ public class NPanel extends JPanel implements MouseListener{
 	}
 	
 	private void initPanel() {
-		// °×ÆåÏÈ×ß
+		// ç™½æ£‹å…ˆèµ°
 		turn = -1;
-		// Éî¿½±´
+		// æ·±æ‹·è´
 		for(int i = 0; i < 8; ++i)
 			cur_map[i] = My_map.map[i].clone();
 		
-		// ³õÊ¼»¯Æå×Ó
+		// åˆå§‹åŒ–æ£‹å­
 		chesses.clear();
 		b_pawn = new Pawn[8];
 		w_pawn = new Pawn[8];
@@ -127,7 +127,7 @@ public class NPanel extends JPanel implements MouseListener{
 		chesses.add(w_king);
 	}
 	
-	// »­ÉÏÍ¸Ã÷¿ò±íÊ¾Ñ¡ÖĞ
+	// ç”»ä¸Šé€æ˜æ¡†è¡¨ç¤ºé€‰ä¸­
 	private void draw_red(Graphics g, int r, int c) {
 		for(int i = 0; i < chesses.size(); ++i) {
 			Chess temp = chesses.get(i);
@@ -182,7 +182,7 @@ public class NPanel extends JPanel implements MouseListener{
 		}
 	}
 	
-	// Ëõ·ÅÍ¼Æ¬£¬ timesÎªËõ·Å±¶Êı
+	// ç¼©æ”¾å›¾ç‰‡ï¼Œ timesä¸ºç¼©æ”¾å€æ•°
 	public ImageIcon change(ImageIcon image, double times) {
 		int width = (int)(image.getIconWidth() * times);
 		int height = (int)(image.getIconHeight() * times);
@@ -205,21 +205,21 @@ public class NPanel extends JPanel implements MouseListener{
 			if(chooseChess == null) {
 				set_choose(i, j);
 			} else {
-				// È«²¿Ñ¡ÖĞÖÃÎªfalse
+				// å…¨éƒ¨é€‰ä¸­ç½®ä¸ºfalse
 				set_choose(-1,  -1);
-				// ÌØÅĞÍõ³µÒ×Î»
+				// ç‰¹åˆ¤ç‹è½¦æ˜“ä½
 				if(Math.abs(chooseChess.getAttribute()) == 6) {
 					King temp = (King)chooseChess;
 					if(change_king_with_rook(temp, i, j))
 						return;
 				}
 				
-				// ÅĞ¶Ï±øÌØÊâ³Ô×Ó×ß·¨(Ğ±³Ô + ¹ıÂ·±ø)
+				// åˆ¤æ–­å…µç‰¹æ®Šåƒå­èµ°æ³•(æ–œåƒ + è¿‡è·¯å…µ)
 				if(Math.abs(chooseChess.getAttribute()) == 1) {
 					Pawn temp = (Pawn)chooseChess;
 					if(temp.pawn_eat_move(new Point(i, j)) && temp.confilct(cur_map[i][j]) == false) {
 						if(pawn_can_eat(temp, i, j)) {
-							// ÅĞ¶Ï±øµÄÉı±ä
+							// åˆ¤æ–­å…µçš„å‡å˜
 							if(i == 0 || i == 7) {
 								imporve_pawn(chooseChess, i, j);
 							}
@@ -228,25 +228,25 @@ public class NPanel extends JPanel implements MouseListener{
 					}
 				}
 				
-				//	Õı³£Ç°½ø¡¢³Ô×Ó
+				//	æ­£å¸¸å‰è¿›ã€åƒå­
 				if((chooseChess.moveable(new Point(i, j)) == true && chooseChess.confilct(cur_map[i][j]) == false)) {
-					// ÅĞ¶ÏÂ·¾¶ÉÏÓĞÎŞÆäËûÆå×Ó
+					// åˆ¤æ–­è·¯å¾„ä¸Šæœ‰æ— å…¶ä»–æ£‹å­
 					if(in_way(chooseChess, chooseChess.getX(), chooseChess.getY(), i, j))
 						return;
 
 					int x = chooseChess.getX();
 					int y = chooseChess.getY();
-					// »Ö¸´ÖÁ¿ÕµØÊôĞÔ
+					// æ¢å¤è‡³ç©ºåœ°å±æ€§
 					cur_map[x][y] = 0;
-					// ÒÆ¶¯µ½µÄÎ»ÖÃÓĞÆå×ÓÔò³Ôµô
+					// ç§»åŠ¨åˆ°çš„ä½ç½®æœ‰æ£‹å­åˆ™åƒæ‰
 					if(cur_map[i][j] != 0)
 						remove_killed(i, j);
 					
 					cur_map[i][j] = chooseChess.getAttribute();
-					// ¸Ä±äÆå×ÓÎ»ÖÃ
+					// æ”¹å˜æ£‹å­ä½ç½®
 					chooseChess.setPos(i, j);
 					
-					// ³µºÍÍõÌØÅĞÊÇ·ñÒÆ¶¯¹ı
+					// è½¦å’Œç‹ç‰¹åˆ¤æ˜¯å¦ç§»åŠ¨è¿‡
 					if(Math.abs(chooseChess.getAttribute()) == 2) {
 						Rook temp = (Rook)chooseChess;
 						temp.setIsmoved(true);
@@ -256,17 +256,17 @@ public class NPanel extends JPanel implements MouseListener{
 						temp.setIsmoved(true);
 					}
 					
-					// È¥³ı¹ıÂ·±øÌØĞÔ
+					// å»é™¤è¿‡è·¯å…µç‰¹æ€§
 					set_pawn_move_two_false(i, j);
 					
-					// Éı±äÇ°ÏÈÖØ»æ
+					// å‡å˜å‰å…ˆé‡ç»˜
 					repaint();
-					// ÅĞ¶Ï±øµÄÉı±ä
+					// åˆ¤æ–­å…µçš„å‡å˜
 					if(Math.abs(chooseChess.getAttribute()) == 1 && (i == 0 || i == 7)) {
 						imporve_pawn(chooseChess, i, j);
 					}
 					
-					// ½»»»ÆåÈ¨
+					// äº¤æ¢æ£‹æƒ
 					turn = -turn;
 					check_win();
 				}
@@ -278,7 +278,7 @@ public class NPanel extends JPanel implements MouseListener{
 	private void set_choose(int x, int y) {
 		for(int i = 0; i < chesses.size(); ++i) {
 			Chess temp = chesses.get(i);
-			// ÂÖÁ÷Âä×Ó
+			// è½®æµè½å­
 			if(turn * temp.getAttribute() < 0)
 				continue;
 			
@@ -321,7 +321,7 @@ public class NPanel extends JPanel implements MouseListener{
 		}
 	}
 	
-	// ÅĞ¶ÏÂ·¾¶ÉÏÓĞÎŞÆäËûÆå×Ó
+	// åˆ¤æ–­è·¯å¾„ä¸Šæœ‰æ— å…¶ä»–æ£‹å­
 	private boolean in_way(Chess chooseChess, int x1, int y1, int x2, int y2) {
 		if(Math.abs(chooseChess.getAttribute()) == 3)
 			return false;
@@ -333,7 +333,7 @@ public class NPanel extends JPanel implements MouseListener{
 			Chess temp = chesses.get(i);
 			int x3 = temp.getX();
 			int y3 = temp.getY();
-			// È¥µôÁ½¸ö¶ËµãºóÅĞ¶ÏÊÇ·ñÈıµãÒ»ÏßÇÒ3ÔÚÖĞ¼ä
+			// å»æ‰ä¸¤ä¸ªç«¯ç‚¹ååˆ¤æ–­æ˜¯å¦ä¸‰ç‚¹ä¸€çº¿ä¸”3åœ¨ä¸­é—´
 			if(!(x1 == x3 && y1 == y3) && !(x2 == x3 && y2 == y3))
 				if(((y3 - y1) * (x2 - x3)) == ((y2 - y3) * (x3 - x1)))
 					if(x3 <= Math.max(x1, x2) && x3 >= Math.min(x1, x2) && y3 <= Math.max(y1, y2) && y3 >= Math.min(y1, y2))
@@ -354,7 +354,7 @@ public class NPanel extends JPanel implements MouseListener{
 		}
 	}
 	
-	// Ó®µÄÌõ¼ş£ºÉ±ËÀ¶Ô·½µÄÍõ
+	// èµ¢çš„æ¡ä»¶ï¼šæ€æ­»å¯¹æ–¹çš„ç‹
 	private void check_win() {
 		int is_b_king_find = 0;
 		int is_w_king_find = 0;
@@ -367,17 +367,17 @@ public class NPanel extends JPanel implements MouseListener{
 		}
 		
 		if(is_b_king_find == 0) {
-			JOptionPane.showMessageDialog(this, "¹§Ï²°×·½Ê¤³ö£¡", "Bravo", JOptionPane.PLAIN_MESSAGE);
+			JOptionPane.showMessageDialog(this, "æ­å–œç™½æ–¹èƒœå‡ºï¼", "Bravo", JOptionPane.PLAIN_MESSAGE);
 			initPanel();
 			return;
 		} else if(is_w_king_find == 0) {
-			JOptionPane.showMessageDialog(this, "¹§Ï²ºÚ·½Ê¤³ö£¡", "Bravo", JOptionPane.PLAIN_MESSAGE);
+			JOptionPane.showMessageDialog(this, "æ­å–œé»‘æ–¹èƒœå‡ºï¼", "Bravo", JOptionPane.PLAIN_MESSAGE);
 			initPanel();
 			return;
 		}
 	}
 	
-	// Íõ³µÒ×Î»
+	// ç‹è½¦æ˜“ä½
 	private boolean change_king_with_rook(King temp, int i, int j) {
 		int ky = temp.getY();
 		if(temp.confilct(cur_map[i][j]) == false && temp.getIsmoved() == false && temp.change_with_rook(i, j)) {
@@ -394,7 +394,7 @@ public class NPanel extends JPanel implements MouseListener{
 						cur_map[i][j + 1] = temp2.getAttribute();
 						temp2.setPos(i, j + 1);
 						
-						// ½»»»ÆåÈ¨
+						// äº¤æ¢æ£‹æƒ
 						turn = -turn;
 						
 						repaint();
@@ -413,7 +413,7 @@ public class NPanel extends JPanel implements MouseListener{
 					cur_map[i][j - 1] = temp2.getAttribute();
 					temp2.setPos(i, j - 1);
 					
-					// ½»»»ÆåÈ¨
+					// äº¤æ¢æ£‹æƒ
 					turn = -turn;
 					
 					repaint();
@@ -425,15 +425,15 @@ public class NPanel extends JPanel implements MouseListener{
 		return false;
 	}
 	
-	// ÅĞ¶Ï±øµÄĞ±³Ô
+	// åˆ¤æ–­å…µçš„æ–œåƒ
 	private boolean pawn_can_eat(Pawn temp, int i, int j) {
-		// Èç¹ûĞ±¶Ô½Ç²»Îª¿Õ£¬ ÔòÖ±½Ó³Ô
+		// å¦‚æœæ–œå¯¹è§’ä¸ä¸ºç©ºï¼Œ åˆ™ç›´æ¥åƒ
 		if(cur_map[i][j] != 0) {
-			// »Ö¸´ÖÁ¿ÕµØÊôĞÔ
+			// æ¢å¤è‡³ç©ºåœ°å±æ€§
 			cur_map[temp.getX()][temp.getY()] = 0;
-			// ÒÆ¶¯µ½µÄÎ»ÖÃÓĞÆå×ÓÔò³Ôµô
+			// ç§»åŠ¨åˆ°çš„ä½ç½®æœ‰æ£‹å­åˆ™åƒæ‰
 			remove_killed(i, j);
-			// ¸Ä±ä¶ÔÓ¦ÊôĞÔ
+			// æ”¹å˜å¯¹åº”å±æ€§
 			cur_map[i][j] = temp.getAttribute();
 			temp.setPos(i, j);
 			
@@ -444,7 +444,7 @@ public class NPanel extends JPanel implements MouseListener{
 			return true;
 			
 		} else if(cur_map[i][j] == 0 && temp.getAttribute() == -1 && cur_map[i + 1][j] == 1) {
-			//Ğ±¶Ô½ÇÎŞ×Ó£¬ÅĞ¶Ï¹ıÂ·±ø
+			//æ–œå¯¹è§’æ— å­ï¼Œåˆ¤æ–­è¿‡è·¯å…µ
 			Pawn temp2;
 			temp2 = (Pawn)find_chess_by_pos(i + 1, j);
 //			System.out.println(temp2.getAttribute());
@@ -454,7 +454,7 @@ public class NPanel extends JPanel implements MouseListener{
 				return true;
 			}
 		} else if(cur_map[i][j] == 0 && temp.getAttribute() == 1 && cur_map[i - 1][j] == -1) {
-			//Ğ±¶Ô½ÇÎŞ×Ó£¬ÅĞ¶Ï¹ıÂ·±ø
+			//æ–œå¯¹è§’æ— å­ï¼Œåˆ¤æ–­è¿‡è·¯å…µ
 			Pawn temp2;
 			temp2 = (Pawn)find_chess_by_pos(i - 1, j);
 			if(temp2.getLast_move_two() == true) {
@@ -467,12 +467,12 @@ public class NPanel extends JPanel implements MouseListener{
 	}
 	
 	private void change_passed_pawn(Pawn temp, Pawn temp2, int i, int j, int add) {
-		// »Ö¸´ÖÁ¿ÕµØÊôĞÔ
+		// æ¢å¤è‡³ç©ºåœ°å±æ€§
 		cur_map[temp.getX()][temp.getY()] = 0;
 		cur_map[temp2.getX()][temp2.getY()] = 0;
-		// ÒÆ¶¯µ½µÄÎ»ÖÃÓĞÆå×ÓÔò³Ôµô
+		// ç§»åŠ¨åˆ°çš„ä½ç½®æœ‰æ£‹å­åˆ™åƒæ‰
 		remove_killed(i + add, j);
-		// ¸Ä±ä¶ÔÓ¦ÊôĞÔ
+		// æ”¹å˜å¯¹åº”å±æ€§
 		cur_map[i][j] = temp.getAttribute();
 		temp.setPos(i, j);
 		
@@ -483,16 +483,19 @@ public class NPanel extends JPanel implements MouseListener{
 	}
 	
 	
-	// ±øµÄÉı±ä
+	// å…µçš„å‡å˜
 	private void imporve_pawn(Chess chooseChess, int i, int j) {
 		chesses.remove(chooseChess);
-		int value = JOptionPane.showOptionDialog(this, "ÇëÑ¡Ôñ½«±øÉı±ä³É£º", "±øµÄÉı±ä", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
+		int value = JOptionPane.showOptionDialog(this, "è¯·é€‰æ‹©å°†å…µå‡å˜æˆï¼š", "å…µçš„å‡å˜", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
 		switch(value) {
 			case 0: {
 				if(i == 0)
 					chooseChess = new Rook(-2, new Point(i, j), "white");
 				else if(i == 7)
 					chooseChess = new Rook(2, new Point(i, j), "black");
+				
+				Rook temp = (Rook)chooseChess;
+				temp.setIsmoved(true);
 				break;
 			}
 			case 1: {
@@ -509,7 +512,8 @@ public class NPanel extends JPanel implements MouseListener{
 					chooseChess = new Bishop(4, new Point(i, j), "black");
 				break;
 			}
-			case 3: {
+			case 3: 
+			default:{
 				if(i == 0)
 					chooseChess = new Queen(-5, new Point(i, j), "white");
 				else if(i == 7)
