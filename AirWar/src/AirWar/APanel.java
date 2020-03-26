@@ -29,10 +29,10 @@ import java.util.TimerTask;
 import Block.*;
 
 public class APanel extends JPanel implements KeyListener{
-	// »­²¼´óĞ¡
+	// ç”»å¸ƒå¤§å°
 	public static final double HEIGHT = 765;
 	public static final double WIDTH = 500;
-	// µ¼ÈëÍ¼Æ¬
+	// å¯¼å…¥å›¾ç‰‡
 	ImageIcon backgroundIcon = new ImageIcon("background.png");
 	ImageIcon gameoverIcon = new ImageIcon("gameover.png");
 	ImageIcon againIcon = new ImageIcon("again.png");
@@ -71,43 +71,43 @@ public class APanel extends JPanel implements KeyListener{
 	ImageIcon bullet_supplyIcon = new ImageIcon("bullet_supply.png");
 	ImageIcon bullet1Icon = new ImageIcon("bullet1.png");
 	ImageIcon bullet2Icon = new ImageIcon("bullet2.png");
-	// ÎÒ·½·É»ú
+	// æˆ‘æ–¹é£æœº
 	MyPlane myPlane;
-	// Í¼Æ¬ÁĞ±í, ÓÃÓÚÍ¼Æ¬ÇĞ»»
+	// å›¾ç‰‡åˆ—è¡¨, ç”¨äºå›¾ç‰‡åˆ‡æ¢
 	ImageIcon[] me_icons;
 	ImageIcon[] me_down_icons;
 	ImageIcon[] e1_down_icons;
 	ImageIcon[] e2_down_icons;
 	ImageIcon[] e3_icons;
 	ImageIcon[] e3_down_icons;
-	// ×Óµ¯
+	// å­å¼¹
 	LinkedList<Bullet> bullets = new LinkedList<Bullet>();
-	// µĞ·½Ì¹¿Ë
+	// æ•Œæ–¹å¦å…‹
 	LinkedList<Enemy> enemies = new LinkedList<Enemy>();
-	// ²¹¸ø
+	// è¡¥ç»™
 	LinkedList<Supply> supplies = new LinkedList<Supply>();
-	// ·É»úËæÊó±êÒÆ¶¯
+	// é£æœºéšé¼ æ ‡ç§»åŠ¨
 	Timer timer1 = new Timer();
 	int count5 = 0;
-	// ÎÒ·½Éä»÷²¢ÒÆ¶¯×Óµ¯
+	// æˆ‘æ–¹å°„å‡»å¹¶ç§»åŠ¨å­å¼¹
 	Timer timer2 = new Timer();
 	int count1 = 0;
-	// ¼ä½Ó¼ÆËãË«·¢×Óµ¯Î¬³ÖÊ±¼ä
+	// é—´æ¥è®¡ç®—åŒå‘å­å¼¹ç»´æŒæ—¶é—´
 	int count4 = 0;
-	// Ëæ»úÉú³ÉµĞ·½Ì¹¿Ë²¢ÒÆ¶¯µĞ·½Ì¹¿Ë
+	// éšæœºç”Ÿæˆæ•Œæ–¹å¦å…‹å¹¶ç§»åŠ¨æ•Œæ–¹å¦å…‹
 	Timer timer3 = new Timer();
 	Random random = new Random();
 	int[] choice = new int[] {1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 3};
 	int count2 = 0;
-	// Ë¢ĞÂ²¹¸ø
+	// åˆ·æ–°è¡¥ç»™
 	Timer timer4 = new Timer();
 	int count3 = 0;
-	// Ë¢ĞÂÍ¼Æ¬²¥·ÅËÀÍö¶¯»­
+	// åˆ·æ–°å›¾ç‰‡æ’­æ”¾æ­»äº¡åŠ¨ç”»
 	Timer timer5 = new Timer();
 	Timer timer6 = new Timer();
 	Timer timer7 = new Timer();
 	Timer timer8 = new Timer();
-	// µ±Ç°µÃ·Ö¡¢µÈ¼¶¡¢È«ÆÁÕ¨µ¯ÊıÁ¿
+	// å½“å‰å¾—åˆ†ã€ç­‰çº§ã€å…¨å±ç‚¸å¼¹æ•°é‡
 	int score;
 	int level;
 	int create_enemy_speed;
@@ -163,12 +163,12 @@ public class APanel extends JPanel implements KeyListener{
 		enemies.clear();
 		supplies.clear();
 		myPlane = new MyPlane(APanel.WIDTH/2 - MyPlane.WIDTH/2, APanel.HEIGHT - MyPlane.HEIGHT, me1Icon);
-		// ·É»ú¸úËæÊó±êÒÆ¶¯
+		// é£æœºè·Ÿéšé¼ æ ‡ç§»åŠ¨
 		try {
 			timer1.schedule(new TimerTask() {
 				@Override
 				public void run() {
-					// ÎÒ·½·É»úµÄÅçÆø¶¯»­
+					// æˆ‘æ–¹é£æœºçš„å–·æ°”åŠ¨ç”»
 					count5 = (count5 + 1) % 4;
 					if(count5 == 3) {
 						if(myPlane.getIcon() == me1Icon)
@@ -190,16 +190,16 @@ public class APanel extends JPanel implements KeyListener{
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
-		// ·É»úÉä»÷
+		// é£æœºå°„å‡»
 		try {
 			timer2.schedule(new TimerTask() {
 				@Override
 				public void run() {
-					// Éú³É×Óµ¯
+					// ç”Ÿæˆå­å¼¹
 					count1 = (count1 + 1) % 5;
 					if(count1 == 4) {
 						if(myPlane.getDoubleshot() == true) {
-							// ¼ä½Ó¼ÆËãË«·¢Ê±¼ä
+							// é—´æ¥è®¡ç®—åŒå‘æ—¶é—´
 							count4++;
 							if(count4 == 20) {
 								myPlane.setDoubleshot(false);
@@ -215,7 +215,7 @@ public class APanel extends JPanel implements KeyListener{
 							bullets.add(tempBullet);
 						}
 					}
-					// ×Óµ¯ÒÆ¶¯
+					// å­å¼¹ç§»åŠ¨
 					for(int i = 0; i < bullets.size(); ++i) {
 						Bullet temp = bullets.get(i);
 						temp.move();
@@ -228,12 +228,12 @@ public class APanel extends JPanel implements KeyListener{
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
-		// Ëæ»úÉú³ÉµĞ·½·É»ú
+		// éšæœºç”Ÿæˆæ•Œæ–¹é£æœº
 		try {
 			timer3.schedule(new TimerTask() {
 				@Override
 				public void run() {
-					// Éú³É·É»ú
+					// ç”Ÿæˆé£æœº
 					count2 = (count2 + 1) % create_enemy_speed + 1;
 					if(count2 == create_enemy_speed) {
 						int tempChoice = random.nextInt(11);
@@ -253,7 +253,7 @@ public class APanel extends JPanel implements KeyListener{
 						Enemy tempEnemy = new Enemy(tempX, -100, choice[tempChoice], tempIcon);
 						enemies.add(tempEnemy);
 					}
-					// ·É»úÒÆ¶¯
+					// é£æœºç§»åŠ¨
 					for(int i = 0; i < enemies.size(); ++i) {
 						Enemy temp = enemies.get(i);
 						temp.move();
@@ -266,12 +266,12 @@ public class APanel extends JPanel implements KeyListener{
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
-		// Ë¢ĞÂ²¹¸ø£¬ 30sÒ»¸ö²¹¸ø
+		// åˆ·æ–°è¡¥ç»™ï¼Œ 30sä¸€ä¸ªè¡¥ç»™
 		try {
 			timer4.schedule(new TimerTask() {
 				@Override
 				public void run() {
-					// Éú³É²¹¸ø
+					// ç”Ÿæˆè¡¥ç»™
 					count3 = (count3 + 1) % 151;
 					if(count3 == 150) {
 						double tempX = random.nextDouble() * 450;
@@ -279,7 +279,7 @@ public class APanel extends JPanel implements KeyListener{
 						supplies.add(tempSupply);
 						playWav("supply.wav");
 					}
-					// ×Óµ¯ÒÆ¶¯
+					// å­å¼¹ç§»åŠ¨
 					for(int i = 0; i < supplies.size(); ++i) {
 						Supply temp = supplies.get(i);
 						temp.move();
@@ -298,28 +298,28 @@ public class APanel extends JPanel implements KeyListener{
 	
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
-		// »æÖÆ±³¾°
+		// ç»˜åˆ¶èƒŒæ™¯
 		backgroundIcon.paintIcon(this, g, 0, 0);
-		// »æÖÆµ±Ç°µÃ·Ö¡¢µÈ¼¶¡¢Õ¨µ¯ÊıÁ¿
+		// ç»˜åˆ¶å½“å‰å¾—åˆ†ã€ç­‰çº§ã€ç‚¸å¼¹æ•°é‡
 		g.setColor(Color.WHITE);
-		g.setFont(new Font("»ªÎÄĞĞ¿¬", Font.BOLD, 30));
+		g.setFont(new Font("åæ–‡è¡Œæ¥·", Font.BOLD, 30));
 		g.drawString("Score: " + score, 10, 50);
 		g.drawString("Level: " + level, 350, 50);
 		bombIcon.paintIcon(this, g, 10, 700);
-		g.drawString(" ¡Á " + bomb_count, 70, 740);
-		// »æÖÆÎÒ·½·É»ú
+		g.drawString(" Ã— " + bomb_count, 70, 740);
+		// ç»˜åˆ¶æˆ‘æ–¹é£æœº
 		myPlane.getIcon().paintIcon(this, g, (int)myPlane.getX(), (int)myPlane.getY());
-		// »æÖÆ×Óµ¯
+		// ç»˜åˆ¶å­å¼¹
 		for(int i = 0; i < bullets.size(); ++i) {
 			Bullet temp = bullets.get(i);
 			temp.getIcon().paintIcon(this, g, (int)temp.getX(), (int)temp.getY());
 		}
-		// »æÖÆµĞ»ú
+		// ç»˜åˆ¶æ•Œæœº
 		for(int i = 0; i < enemies.size(); ++i) {
 			Enemy temp = enemies.get(i);
 			temp.getIcon().paintIcon(this, g, (int)temp.getX(), (int)temp.getY());
 		}
-		// »æÖÆ²¹¸ø
+		// ç»˜åˆ¶è¡¥ç»™
 		for(int i = 0; i < supplies.size(); ++i) {
 			Supply temp = supplies.get(i);
 			if(temp.getKind() == 0)
@@ -329,7 +329,7 @@ public class APanel extends JPanel implements KeyListener{
 		}
 	}
 	
-	// Ëõ·ÅÍ¼Æ¬£¬ timesÎªËõ·Å±¶Êı
+	// ç¼©æ”¾å›¾ç‰‡ï¼Œ timesä¸ºç¼©æ”¾å€æ•°
 	public ImageIcon change(ImageIcon image, double times) {
 		int width = (int)(image.getIconWidth() * times);
 		int height = (int)(image.getIconHeight() * times);
@@ -363,14 +363,14 @@ public class APanel extends JPanel implements KeyListener{
 				temp.setHp(temp.getHp() - 1);
 				if(temp.getHp() == 0) {
 					if(temp.getSize() == 1) {
-						// ËÀÍö¶¯»­
+						// æ­»äº¡åŠ¨ç”»
 						timer6 = new Timer();
 						try {
 							timer6.schedule(new TimerTask() {
 								int temp_count = 0;
 								@Override
 								public void run() {
-									// Éú³É²¹¸ø
+									// ç”Ÿæˆè¡¥ç»™
 									if(temp_count == 4) {
 										enemies.remove(temp);
 										temp_count = 0;
@@ -386,17 +386,17 @@ public class APanel extends JPanel implements KeyListener{
 						} catch(Exception e) {
 							e.printStackTrace();
 						}
-						// ËÀÍöÒôÀÖ
+						// æ­»äº¡éŸ³ä¹
 						playWav("enemy1_down.wav");
 					} else if(temp.getSize() == 2) {
-						// ËÀÍö¶¯»­
+						// æ­»äº¡åŠ¨ç”»
 						timer7 = new Timer();
 						try {
 							timer7.schedule(new TimerTask() {
 								int temp_count = 0;
 								@Override
 								public void run() {
-									// Éú³É²¹¸ø
+									// ç”Ÿæˆè¡¥ç»™
 									if(temp_count == 4) {
 										enemies.remove(temp);
 										temp_count = 0;
@@ -415,14 +415,14 @@ public class APanel extends JPanel implements KeyListener{
 						
 						playWav("enemy2_down.wav");
 					} else {
-						// ËÀÍö¶¯»­
+						// æ­»äº¡åŠ¨ç”»
 						timer8 = new Timer();
 						try {
 							timer8.schedule(new TimerTask() {
 								int temp_count = 0;
 								@Override
 								public void run() {
-									// Éú³É²¹¸ø
+									// ç”Ÿæˆè¡¥ç»™
 									if(temp_count == 6) {
 										enemies.remove(temp);
 										temp_count = 0;
@@ -511,14 +511,14 @@ public class APanel extends JPanel implements KeyListener{
 	}
 	
 	private void gameover() {
-		// ËÀÍö¶¯»­
+		// æ­»äº¡åŠ¨ç”»
 		timer5 = new Timer();
 		try {
 			timer5.schedule(new TimerTask() {
 				int temp_count = 0;
 				@Override
 				public void run() {
-					// Éú³É²¹¸ø
+					// ç”Ÿæˆè¡¥ç»™
 					if(temp_count == 4) {
 						temp_count = 0;
 						timer5.cancel();
@@ -532,9 +532,24 @@ public class APanel extends JPanel implements KeyListener{
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
-		
-		JOptionPane.showMessageDialog(this, "ºÜÒÅº¶ÄãÊäÁË£¡\n", "Big-Bomb", JOptionPane.PLAIN_MESSAGE);
+		resetTimer();
+		JOptionPane.showMessageDialog(this, "å¾ˆé—æ†¾ä½ è¾“äº†ï¼\n", "Big-Bomb", JOptionPane.PLAIN_MESSAGE);
 		initPanel();
+	}
+	
+	public void resetTimer() {
+		timer1.cancel();
+		timer2.cancel();
+		timer3.cancel();
+		timer4.cancel();
+		timer5.cancel();
+		timer6.cancel();
+		timer7.cancel();
+		timer8.cancel();
+		timer1 = new Timer();
+		timer2 = new Timer();
+		timer3 = new Timer();
+		timer4 = new Timer();
 	}
 
 	@Override
